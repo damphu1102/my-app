@@ -1,0 +1,53 @@
+.container_movie {
+  .movie {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(4, minmax(240px, 1fr));
+    grid-auto-rows: auto;
+    padding: 20px;
+    justify-items: center;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .link_movie {
+    a {
+      text-decoration: none;
+    }
+    .btn_view_movie {
+      padding: 10px 20px;
+      background-color: #0f1b4c;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: auto;
+      margin-right: 60px;
+      display: block;
+    }
+  }
+}
+.card-img-top {
+  height: 300px;
+}
+.card-title {
+  text-align: center;
+}
+.card-text {
+  padding: 2px;
+  margin-bottom: 15px;
+  p {
+    padding: 2px;
+  }
+}
+.button {
+  padding: 10px 0;
+  margin-top: 8px;
+  background-color: #0f1b4c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3sease;
+  width: 100%;
+  text-align: center;
+}

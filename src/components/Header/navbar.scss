@@ -1,0 +1,17 @@
+.navbar-expand .navbar-nav {
+  gap: 80px;
+  :hover {
+    color: rgb(13, 201, 243);
+  }
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+.bg-light {
+  background-color: #eee !important;
+}
+.d-flex {
+  margin-left: 100px;
+}
+.navbar-expand .navbar-nav .nav-link {
+  padding: 0;
+}
