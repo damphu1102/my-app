@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { LayoutRoot } from "./components/Layout/LayoutRoot";
 import { Login } from "./components/Login/Login";
 import { HomeAdmin } from "./components/AdminPage/HomeAdmin";
 import { Home } from "./components/Home/Home";
+import { MovieManager } from "./components/AdminPage/ContentPage/MovieManager";
+import { DashboardManager } from "./components/AdminPage/ContentPage/DashboardManager";
 
 const router = createBrowserRouter([
   {
@@ -22,12 +23,23 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/admin",
+    path: "admin",
     element: <Login />,
   },
   {
-    path: "/home_admin",
+    path: "home_admin",
     element: <HomeAdmin />,
+    children: [
+      {
+        index: true,
+        path: "dashboard_manager",
+        element: <DashboardManager />,
+      },
+      {
+        path: "movie_manager",
+        element: <MovieManager />,
+      },
+    ],
   },
 ]);
 
@@ -35,7 +47,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <RouterProvider router={router}>
     <React.StrictMode>
-      <App />
+      <Home />
     </React.StrictMode>
   </RouterProvider>
 );

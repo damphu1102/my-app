@@ -23,20 +23,24 @@ export const Banner = () => {
   return (
     <>
       <Carousel data-bs-theme="dark" className="movie">
-        {banners.map((banner) => (
-          <Carousel.Item key={banner.id}>
-            <img
-              className="d-block w-100"
-              src={banner.imageURL}
-              alt={`Banner ${banner.id}`}
-              style={{
-                borderRadius: "10px", // Bo góc
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Đổ bóng
-                border: "2px solid #ccc",
-              }} // Viền}}
-            />
-          </Carousel.Item>
-        ))}
+        {banners.length > 0 ? (
+          banners.map((banner) => (
+            <Carousel.Item key={banner.id}>
+              <img
+                className="d-block w-100"
+                src={banner.imageURL}
+                alt={`Banner ${banner.id}`}
+                style={{
+                  borderRadius: "10px", // Bo góc
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Đổ bóng
+                  border: "2px solid #ccc",
+                }} // Viền}}
+              />
+            </Carousel.Item>
+          ))
+        ) : (
+          <p>Không có dữ liệu Carousel</p>
+        )}
       </Carousel>
     </>
   );

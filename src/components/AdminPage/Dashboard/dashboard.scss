@@ -1,0 +1,27 @@
+.dashboard {
+  z-index: 1000;
+  width: 220px;
+  background-color: #e0e0e0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+
+  .header_dash {
+    padding: 10px;
+    margin: 20px;
+    h4 {
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+  .content_dash {
+    .accordion-body {
+      a {
+        text-decoration: none;
+        color: black;
+        cursor: pointer;
+      }
+    }
+  }
+}
