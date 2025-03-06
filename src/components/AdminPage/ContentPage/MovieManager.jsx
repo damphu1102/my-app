@@ -4,9 +4,14 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { Table } from "react-bootstrap";
+import { ModalMovie } from "../Modal/ModalMovie";
 
 export const MovieManager = () => {
   const [movies, setMovies] = useState([]);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -23,7 +28,9 @@ export const MovieManager = () => {
   return (
     <div className="content_page">
       <div className="control">
-        <Button variant="primary">Tạo phim</Button>
+        <Button variant="primary" onClick={handleShow}>
+          Tạo phim
+        </Button>
         <Form className="d-flex">
           <Form.Control
             type="search"
@@ -46,18 +53,19 @@ export const MovieManager = () => {
             </tr>
           </thead>
           {movies.map((movie) => (
-            <tbody key={movie.id}>
-              <tr>
+            <tbody key={movie.id} style={{ cursor: "pointer" }}>
+              <tr onClick={handleShow}>
                 <td>{movie.movieName}</td>
                 <td>{movie.releaseDate}</td>
                 <td>{movie.genre}</td>
-                <td>Công khai</td>
+                <td>{movie.statusMovie}</td>
                 <td>{movie.createAt}</td>
               </tr>
             </tbody>
           ))}
         </Table>
       </div>
+      <ModalMovie show={show} onHide={handleClose} />
     </div>
   );
 };
