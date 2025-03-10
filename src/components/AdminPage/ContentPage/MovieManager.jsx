@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { Table } from "react-bootstrap";
 import { ModalMovie } from "../Modal/ModalMovie";
+import { CiSearch } from "react-icons/ci";
 
 export const MovieManager = () => {
   const [movies, setMovies] = useState([]);
@@ -38,7 +39,9 @@ export const MovieManager = () => {
             className="me-2"
             aria-label="Search"
           />
-          <Button variant="outline-success">Search</Button>
+          <Button variant="outline-success">
+            <CiSearch style={{ fontSize: "1.2rem" }} />
+          </Button>
         </Form>
       </div>
       <div className="table">

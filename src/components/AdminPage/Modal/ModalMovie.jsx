@@ -1,6 +1,7 @@
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import "../Modal/modal.scss";
 import { useState } from "react";
+import axios from "axios";
 
 export const ModalMovie = ({ show, onHide }) => {
   const [newMovie, setNewMovie] = useState([
@@ -21,23 +22,33 @@ export const ModalMovie = ({ show, onHide }) => {
     },
   ]);
 
-  const submitForm = () => {
-    setNewMovie({
-      movieName: "",
-      actor: "",
-      description: "",
-      director: "",
-      duration: "",
-      genre: "",
-      image: "",
-      language: "",
-      rating: "",
-      releaseDate: "",
-      statusMovie: "",
-      trailer: "",
-      viewingAge: "",
-    });
-    onHide();
+  const submitForm = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/movie/create`,
+        newMovie
+      );
+      if (response.status === 200) {
+        setNewMovie({
+          movieName: "",
+          actor: "",
+          description: "",
+          director: "",
+          duration: "",
+          genre: "",
+          image: "",
+          language: "",
+          rating: "",
+          releaseDate: "",
+          statusMovie: "",
+          trailer: "",
+          viewingAge: "",
+        });
+        onHide();
+      }
+    } catch (error) {
+      console.error("Error creating movie:", error);
+    }
   };
 
   console.log(newMovie);
@@ -118,9 +129,9 @@ export const ModalMovie = ({ show, onHide }) => {
                     }}
                   >
                     <option>---</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value={newMovie.genre}>Drama</option>
+                    <option value={newMovie.genre}>Thriller</option>
+                    <option value={newMovie.genre}>Action</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -138,9 +149,9 @@ export const ModalMovie = ({ show, onHide }) => {
                     }}
                   >
                     <option>---</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value={newMovie.language}>Vietnamese</option>
+                    <option value={newMovie.language}>English</option>
+                    <option value={newMovie.language}>Chinese</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -245,9 +256,8 @@ export const ModalMovie = ({ show, onHide }) => {
                     }}
                   >
                     <option>---</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value={newMovie.statusMovie}>Public</option>
+                    <option value={newMovie.statusMovie}>Private</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -285,10 +295,12 @@ export const ModalMovie = ({ show, onHide }) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={submitForm}>
+          <Button variant="secondary" onClick={onHide}>
             Close
           </Button>
-          <Button variant="primary">Save/Changes</Button>
+          <Button variant="primary" onClick={submitForm}>
+            Save/Changes
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>
