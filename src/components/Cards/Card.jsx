@@ -11,8 +11,8 @@ export const CardMovie = ({ movie }) => {
             {movie.movieName}
           </Card.Title>
           <Card.Text>
-            <p>Đạo viên: {movie.actor}</p>
-            <p>Diễn diễn: {movie.director}</p>
+            <p>Đạo viên: {movie.director}</p>
+            <p>Thể loại: {movie.genre}</p>
             <p>Thời lượng: {movie.duration} phút</p>
           </Card.Text>
           <Button variant="primary" className="button">

@@ -1,68 +1,101 @@
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import "../Modal/modal.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-export const ModalMovie = ({ show, onHide }) => {
-  const [newMovie, setNewMovie] = useState([
-    {
-      movieName: "",
-      actor: "",
-      description: "",
-      director: "",
-      duration: "",
-      genre: "",
-      image: "",
-      language: "",
-      rating: "",
-      releaseDate: "",
-      statusMovie: "",
-      trailer: "",
-      viewingAge: "",
-    },
-  ]);
+export const ModalMovie = ({
+  show,
+  onHide,
+  movieToEdit,
+  isEditMode,
+  onSubmitSuccess,
+}) => {
+  const initialMovieState = {
+    movieName: "",
+    actor: "",
+    description: "",
+    director: "",
+    duration: "",
+    genre: "",
+    image: "",
+    language: "",
+    rating: "",
+    releaseDate: "",
+    statusMovie: "",
+    trailer: "",
+    viewingAge: "",
+  };
 
-  const submitForm = async () => {
+  const [newMovie, setNewMovie] = useState(initialMovieState);
+  const [createAt, setCreateAt] = useState(
+    new Date().toISOString().slice(0, 10)
+  ); // Thêm state createAt
+
+  useEffect(() => {
+    if (isEditMode && movieToEdit) {
+      setNewMovie(movieToEdit);
+      setCreateAt(movieToEdit.createAt); // Giữ nguyên ngày tạo khi chỉnh sửa
+    } else {
+      setNewMovie(initialMovieState);
+      setCreateAt(new Date().toISOString().slice(0, 10)); // Đặt ngày tạo là ngày hiện tại khi thêm mới
+    }
+  }, [isEditMode, movieToEdit]);
+
+  // API Xóa
+  const handleDelete = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:8080/movie/create`,
-        newMovie
+      const response = await axios.delete(
+        `http://localhost:8080/movie/delete/${movieToEdit.id}`
       );
       if (response.status === 200) {
-        setNewMovie({
-          movieName: "",
-          actor: "",
-          description: "",
-          director: "",
-          duration: "",
-          genre: "",
-          image: "",
-          language: "",
-          rating: "",
-          releaseDate: "",
-          statusMovie: "",
-          trailer: "",
-          viewingAge: "",
-        });
-        onHide();
+        alert("Xóa phim thành công!");
+        onSubmitSuccess(); // Fetch lại danh sách phim sau khi xóa
       }
     } catch (error) {
-      console.error("Error creating movie:", error);
+      console.error("Error deleting movie:", error);
+      alert("Xóa phim thất bại!");
     }
   };
 
-  console.log(newMovie);
+  // API Thêm mới/Chỉnh sửa
+  const submitForm = async () => {
+    try {
+      let response;
+      if (isEditMode && movieToEdit) {
+        response = await axios.put(
+          `http://localhost:8080/movie/update/${movieToEdit.id}`,
+          {
+            ...newMovie,
+            createAt: createAt, // Gửi ngày tạo khi chỉnh sửa
+          }
+        );
+      } else {
+        response = await axios.post(`http://localhost:8080/movie/create`, {
+          ...newMovie,
+          createAt: createAt, // Gửi ngày tạo khi thêm mới
+        });
+      }
 
+      if (response.status === 200) {
+        setNewMovie(initialMovieState);
+        onHide();
+        onSubmitSuccess();
+        alert(isEditMode ? "Cập nhật thành công!" : "Thêm mới thành công!");
+      }
+    } catch (error) {
+      alert(isEditMode ? "Cập nhật thất bại!" : "Thêm mới thất bại!");
+    }
+  };
   return (
     <div>
       <Modal show={show} size="lg">
         <Modal.Header>
-          <Modal.Title>Thêm mới</Modal.Title>
+          <Modal.Title>{isEditMode ? "Sửa phim" : "Thêm mới"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             {/* Tên phim */}
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3" controlId="formBasicName">
               <Form.Label>Tên phim</Form.Label>
               <Form.Control
                 type="input"
@@ -79,7 +112,7 @@ export const ModalMovie = ({ show, onHide }) => {
             <Row className="g-2">
               <Col md>
                 {/* Đạo diễn */}
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicDirector">
                   <Form.Label>Đạo diễn</Form.Label>
                   <Form.Control
                     type="input"
@@ -96,7 +129,7 @@ export const ModalMovie = ({ show, onHide }) => {
               </Col>
               <Col md>
                 {/* Diễn viên */}
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicActor">
                   <Form.Label>Diễn viên</Form.Label>
                   <Form.Control
                     type="input"
@@ -116,7 +149,7 @@ export const ModalMovie = ({ show, onHide }) => {
             {/* Thể loại và Ngôn ngữ */}
             <Row className="g-2">
               <Col md>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicGenre">
                   <Form.Label>Thể loại</Form.Label>
                   <Form.Select
                     aria-label="Floating label select example"
@@ -129,14 +162,14 @@ export const ModalMovie = ({ show, onHide }) => {
                     }}
                   >
                     <option>---</option>
-                    <option value={newMovie.genre}>Drama</option>
-                    <option value={newMovie.genre}>Thriller</option>
-                    <option value={newMovie.genre}>Action</option>
+                    <option value={newMovie.genre.drama}>Drama</option>
+                    <option value={newMovie.genre.thriller}>Thriller</option>
+                    <option value={newMovie.genre.action}>Action</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
               <Col md>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicLanguage">
                   <Form.Label>Ngôn ngữ</Form.Label>
                   <Form.Select
                     aria-label="Floating label select example"
@@ -149,9 +182,11 @@ export const ModalMovie = ({ show, onHide }) => {
                     }}
                   >
                     <option>---</option>
-                    <option value={newMovie.language}>Vietnamese</option>
-                    <option value={newMovie.language}>English</option>
-                    <option value={newMovie.language}>Chinese</option>
+                    <option value={newMovie.language.vietnamese}>
+                      Vietnamese
+                    </option>
+                    <option value={newMovie.language.english}>English</option>
+                    <option value={newMovie.language.chinese}>Chinese</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -159,7 +194,7 @@ export const ModalMovie = ({ show, onHide }) => {
             {/* Hình ảnh và trailer */}
             <Row className="g-2">
               <Col md>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicImage">
                   <Form.Label>Link hình ảnh</Form.Label>
                   <Form.Control
                     type="url"
@@ -175,7 +210,7 @@ export const ModalMovie = ({ show, onHide }) => {
                 </Form.Group>
               </Col>
               <Col md>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicTrailer">
                   <Form.Label>Link trailer</Form.Label>
                   <Form.Control
                     type="url"
@@ -194,9 +229,10 @@ export const ModalMovie = ({ show, onHide }) => {
             {/* Thời lượng, độ tuổi, đánh giá, ngày công chiếu, trạng thái */}
             <Row className="g-2">
               <Col md>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicDuration">
                   <Form.Label>Thời lượng</Form.Label>
                   <Form.Control
+                    value={newMovie.duration}
                     type="number"
                     min={0}
                     onChange={(e) => {
@@ -210,9 +246,10 @@ export const ModalMovie = ({ show, onHide }) => {
               </Col>
               {/*  */}
               <Col md>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicAge">
                   <Form.Label>Độ tuổi</Form.Label>
                   <Form.Control
+                    value={newMovie.viewingAge}
                     type="number"
                     min={0}
                     onChange={(e) => {
@@ -226,9 +263,10 @@ export const ModalMovie = ({ show, onHide }) => {
               </Col>
               {/*  */}
               <Col md>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicRating">
                   <Form.Label>Đánh giá</Form.Label>
                   <Form.Control
+                    value={newMovie.rating}
                     type="number"
                     min={0}
                     max={5}
@@ -243,7 +281,7 @@ export const ModalMovie = ({ show, onHide }) => {
               </Col>
               {/*  */}
               <Col md>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicStatus">
                   <Form.Label>Trạng thái</Form.Label>
                   <Form.Select
                     aria-label="Floating label select example"
@@ -256,16 +294,19 @@ export const ModalMovie = ({ show, onHide }) => {
                     }}
                   >
                     <option>---</option>
-                    <option value={newMovie.statusMovie}>Public</option>
-                    <option value={newMovie.statusMovie}>Private</option>
+                    <option value={newMovie.statusMovie.public}>Public</option>
+                    <option value={newMovie.statusMovie.private}>
+                      Private
+                    </option>
                   </Form.Select>
                 </Form.Group>
               </Col>
               {/*  */}
               <Col md>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicReleaseDate">
                   <Form.Label>Ngày công chiếu</Form.Label>
                   <Form.Control
+                    value={newMovie.releaseDate}
                     type="date"
                     onChange={(e) => {
                       setNewMovie({
@@ -278,12 +319,15 @@ export const ModalMovie = ({ show, onHide }) => {
               </Col>
             </Row>
             {/* giới thiệu phim */}
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Giới thiệu phim</Form.Label>
+            <Form.Group
+              className="mb-3"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Label>Giới thiệu</Form.Label>
               <Form.Control
                 as="textarea"
                 placeholder="Vui lòng nhập giới thiệu"
-                value={newMovie.description}
+                value={newMovie.description || ""}
                 onChange={(e) => {
                   setNewMovie({
                     ...newMovie,
@@ -298,6 +342,11 @@ export const ModalMovie = ({ show, onHide }) => {
           <Button variant="secondary" onClick={onHide}>
             Close
           </Button>
+          {isEditMode && (
+            <Button variant="danger" onClick={handleDelete}>
+              Xóa
+            </Button>
+          )}
           <Button variant="primary" onClick={submitForm}>
             Save/Changes
           </Button>
