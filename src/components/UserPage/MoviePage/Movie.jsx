@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CardMovie } from "../../Cards/Card";
+import { CardButtonMovie, CardMovie } from "../../Cards/Card";
 import "../MoviePage/movie.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -21,6 +21,9 @@ export const Movie = () => {
 
   return (
     <div className="container_movie">
+      <div className="button_data">
+        <CardButtonMovie />
+      </div>
       <div className="link_movie">
         <Link to="/movie">
           <button className="btn_view_movie">Xem thêm</button>

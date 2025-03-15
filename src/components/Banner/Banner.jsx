@@ -18,8 +18,6 @@ export const Banner = () => {
     fetchBanners();
   }, []);
 
-  console.log(banners);
-
   return (
     <>
       <Carousel data-bs-theme="dark" className="movie">

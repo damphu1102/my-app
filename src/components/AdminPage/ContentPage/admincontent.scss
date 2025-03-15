@@ -11,3 +11,25 @@
   padding-top: 20px;
   display: flex;
 }
+
+.d-flex {
+  position: relative;
+  display: flex;
+  align-items: center;
+  .me-2 {
+    padding-left: 30px;
+  }
+  .search-icon {
+    margin-right: 5px;
+    position: absolute;
+    left: 10px; /* Điều chỉnh vị trí icon */
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Cho phép click xuyên qua icon */
+  }
+}
+
+.control_select {
+  // display: flex;
+  margin-left: 30px;
+}

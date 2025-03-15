@@ -19,7 +19,6 @@ export const ModalMovie = ({
     genre: "",
     image: "",
     language: "",
-    rating: "",
     releaseDate: "",
     statusMovie: "",
     trailer: "",
@@ -30,11 +29,15 @@ export const ModalMovie = ({
   const [createAt, setCreateAt] = useState(
     new Date().toISOString().slice(0, 10)
   ); // Thêm state createAt
+  const [updateAt, setUpdateAt] = useState(
+    new Date().toISOString().slice(0, 10)
+  ); // Thêm state updateAt
 
   useEffect(() => {
     if (isEditMode && movieToEdit) {
       setNewMovie(movieToEdit);
       setCreateAt(movieToEdit.createAt); // Giữ nguyên ngày tạo khi chỉnh sửa
+      setUpdateAt(new Date().toISOString().slice(0, 10)); // Cập nhật ngày cập nhật khi chỉnh sửa
     } else {
       setNewMovie(initialMovieState);
       setCreateAt(new Date().toISOString().slice(0, 10)); // Đặt ngày tạo là ngày hiện tại khi thêm mới
@@ -66,7 +69,7 @@ export const ModalMovie = ({
           `http://localhost:8080/movie/update/${movieToEdit.id}`,
           {
             ...newMovie,
-            createAt: createAt, // Gửi ngày tạo khi chỉnh sửa
+            updateDate: updateAt,
           }
         );
       } else {
@@ -162,9 +165,22 @@ export const ModalMovie = ({
                     }}
                   >
                     <option>---</option>
-                    <option value={newMovie.genre.drama}>Drama</option>
-                    <option value={newMovie.genre.thriller}>Thriller</option>
-                    <option value={newMovie.genre.action}>Action</option>
+                    <option value={newMovie.genre.Drama}>Drama</option>
+                    <option value={newMovie.genre.Thriller}>Thriller</option>
+                    <option value={newMovie.genre.Action}>Action</option>
+                    <option value={newMovie.genre.Historical}>
+                      Historical
+                    </option>
+                    <option value={newMovie.genre.Comedy}>Comedy</option>
+                    <option value={newMovie.genre.Romantic}>Romantic</option>
+                    <option value={newMovie.genre.Animation}>Animation</option>
+                    <option value={newMovie.genre.Psychology}>
+                      Psychology
+                    </option>
+                    <option value={newMovie.genre.Horror}>Horror</option>
+                    <option value={newMovie.genre.Mystery}>Mystery</option>
+                    <option value={newMovie.genre.Adventure}>Adventure</option>
+                    <option value={newMovie.genre.Adventure}>Horrified</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -263,24 +279,6 @@ export const ModalMovie = ({
               </Col>
               {/*  */}
               <Col md>
-                <Form.Group className="mb-3" controlId="formBasicRating">
-                  <Form.Label>Đánh giá</Form.Label>
-                  <Form.Control
-                    value={newMovie.rating}
-                    type="number"
-                    min={0}
-                    max={5}
-                    onChange={(e) => {
-                      setNewMovie({
-                        ...newMovie,
-                        rating: e.target.value,
-                      });
-                    }}
-                  />
-                </Form.Group>
-              </Col>
-              {/*  */}
-              <Col md>
                 <Form.Group className="mb-3" controlId="formBasicStatus">
                   <Form.Label>Trạng thái</Form.Label>
                   <Form.Select
@@ -294,9 +292,14 @@ export const ModalMovie = ({
                     }}
                   >
                     <option>---</option>
-                    <option value={newMovie.statusMovie.public}>Public</option>
-                    <option value={newMovie.statusMovie.private}>
-                      Private
+                    <option value={newMovie.statusMovie.showingNow}>
+                      showingNow
+                    </option>
+                    <option value={newMovie.statusMovie.comingSoon}>
+                      comingSoon
+                    </option>
+                    <option value={newMovie.statusMovie.specialScreening}>
+                      specialScreening
                     </option>
                   </Form.Select>
                 </Form.Group>

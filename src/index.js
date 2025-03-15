@@ -9,6 +9,7 @@ import { HomeAdmin } from "./components/AdminPage/HomeAdmin";
 import { Home } from "./components/Home/Home";
 import { MovieManager } from "./components/AdminPage/ContentPage/MovieManager";
 import { DashboardManager } from "./components/AdminPage/ContentPage/DashboardManager";
+import { MovieInf } from "./components/UserPage/MoviePage/MovieInf/MovieInf";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
         index: true,
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/movieInf",
+        element: <MovieInf />,
       },
     ],
   },
