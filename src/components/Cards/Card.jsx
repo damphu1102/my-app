@@ -1,8 +1,11 @@
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export const CardMovie = ({ movie }) => {
+  const location = useLocation();
+
   return (
     <>
       <Card style={{ width: "20rem" }}>
@@ -16,7 +19,10 @@ export const CardMovie = ({ movie }) => {
             <p>Thể loại: {movie.genre}</p>
             <p>Thời lượng: {movie.duration} phút</p>
           </Card.Text>
-          <Link to={`/movieInf/${movie.id}`}>
+          <Link
+            to={`/movieInf/${movie.id}`}
+            active={location.pathname === "/movie"}
+          >
             <Button variant="primary" className="button">
               Chi tiết phim
             </Button>
@@ -27,19 +33,37 @@ export const CardMovie = ({ movie }) => {
   );
 };
 
-export const CardButtonMovie = () => {
+export const CardButtonMovie = ({ onFilter }) => {
+  const [activeButton, setActiveButton] = useState("showingNow");
+  const handleClick = (status) => {
+    setActiveButton(status);
+    onFilter(status);
+  };
   return (
     <>
       <div className="button_data">
-        <div className="coming">
-          <Link to="#">PHIM SẮP CHIẾU</Link>
-        </div>
-        <div className="showing">
-          <Link to="#">PHIM ĐANG CHIẾU</Link>
-        </div>
-        <div className="special">
-          <Link to="#">SUẤT CHIẾU ĐẶC BIỆT</Link>
-        </div>
+        <Button
+          className={`coming ${activeButton === "comingSoon" ? "active" : ""}`}
+          onClick={() => handleClick("comingSoon")}
+        >
+          PHIM SẮP CHIẾU
+        </Button>
+
+        <Button
+          className={`showing ${activeButton === "showingNow" ? "active" : ""}`}
+          onClick={() => handleClick("showingNow")}
+        >
+          PHIM ĐANG CHIẾU
+        </Button>
+
+        <Button
+          className={`special ${
+            activeButton === "specialScreening" ? "active" : ""
+          }`}
+          onClick={() => handleClick("specialScreening")}
+        >
+          SUẤT CHIẾU ĐẶC BIỆT
+        </Button>
       </div>
     </>
   );

@@ -1,12 +1,12 @@
 import { Banner } from "../Banner/Banner";
-import { Movie } from "../UserPage/MoviePage/Movie";
+import { ContentPage } from "./ContentPage/ContentPage";
 
 export const Home = () => {
   return (
     <>
       <div>
         <Banner />
-        <Movie />
+        <ContentPage />
       </div>
     </>
   );

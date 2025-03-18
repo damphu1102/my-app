@@ -6,22 +6,43 @@ import axios from "axios";
 
 export const MovieInf = () => {
   const [movie, setMovie] = useState("");
+  const [movies, setMovies] = useState([]);
   const { id } = useParams();
+  const [filterStatus, setFilterStatus] = useState("showingNow"); // Trạng thái mặc định
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/movie/${id}`);
+        const url = `http://localhost:8080/movie/${id}`;
+        const response = await axios.get(url);
         setMovie(response.data);
       } catch (error) {
         console.error("Error fetching movie:", error);
       }
     };
+
     fetchMovie();
-    window.scrollTo(0, 0); // Cuộn về đầu trang khi thay đổi trang
+    window.scrollTo(0, 0);
   }, [id]);
 
-  console.log(movie);
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const url = `http://localhost:8080/movie/filter?statusMovie=${filterStatus}`;
+        const response = await axios.get(url);
+        setMovies(response.data);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      }
+    };
+    fetchMovies();
+  }, [filterStatus]);
+
+  const handleClick = (status) => {
+    setFilterStatus(status);
+  };
+
+  console.log(filterStatus);
 
   return (
     <div className="container_movieInf">
@@ -43,17 +64,56 @@ export const MovieInf = () => {
           </div>
         </div>
       </div>
-      <div className="content_trailer">
-        <h2>Trailer</h2>
-        <iframe src={movie.trailer} title={movie.movieName}></iframe>
-      </div>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-        <Form.Label>Gửi bình luận ở đây</Form.Label>
-        <div className="input_control">
-          <Form.Control as="textarea" rows={5} />
-          <button className="send-button">Gửi</button>
+
+      <div className="content_card1">
+        <div className="content_trailer">
+          <iframe src={movie.trailer} title={movie.movieName}></iframe>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+            <Form.Label>Gửi bình luận ở đây</Form.Label>
+            <div className="input_control">
+              <Form.Control as="textarea" rows={4} />
+              <button className="send-button">Gửi</button>
+            </div>
+          </Form.Group>
         </div>
-      </Form.Group>
+
+        <div className="tab_movie">
+          <div className=" tab_btn">
+            <Button
+              onClick={() => handleClick("comingSoon")}
+              className={`coming ${
+                filterStatus === "comingSoon" ? "active" : ""
+              }`}
+            >
+              PHIM SẮP CHIẾU
+            </Button>
+
+            <Button
+              onClick={() => handleClick("showingNow")}
+              className={`showing ${
+                filterStatus === "showingNow" ? "active" : ""
+              }`}
+            >
+              PHIM ĐANG CHIẾU
+            </Button>
+          </div>
+          <div className="tab_list">
+            {movies.length > 0 ? (
+              movies.map((movie) => (
+                <div key={movie.id} className="data">
+                  <img src={movie.image} alt={movie.movieName} />
+                  <div className="list_data">
+                    <h5>{movie.movieName}</h5>
+                    <p>{movie.genre}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>Không có phim yêu cầu</p>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

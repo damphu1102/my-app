@@ -1,8 +1,5 @@
 .navbar-expand .navbar-nav {
   gap: 80px;
-  :hover {
-    color: rgb(13, 201, 243);
-  }
   font-size: 1.3rem;
   font-weight: bold;
 }
@@ -14,4 +11,8 @@
 }
 .navbar-expand .navbar-nav .nav-link {
   padding: 0;
+}
+
+.nav-link.active {
+  color: #ff0000 !important;
 }
