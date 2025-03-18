@@ -16,7 +16,7 @@ export const CardMovie = ({ movie }) => {
             <p>Thể loại: {movie.genre}</p>
             <p>Thời lượng: {movie.duration} phút</p>
           </Card.Text>
-          <Link to="/movieInf">
+          <Link to={`/movieInf/${movie.id}`}>
             <Button variant="primary" className="button">
               Chi tiết phim
             </Button>

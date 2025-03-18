@@ -17,6 +17,7 @@ export const Movie = () => {
       }
     };
     fetchMovies();
+    window.scrollTo(0, 0); // Cuộn về đầu trang khi thay đổi trang
   }, []);
 
   return (
