@@ -1,5 +1,5 @@
 .container_movieInf {
-  margin-top: 150px;
+  margin-top: 120px;
   min-height: 100vh;
 
   .content_card {
@@ -7,9 +7,17 @@
     display: grid;
     grid-template-columns: 1fr 2fr;
     border-bottom: 1px rgb(214, 207, 207) solid;
+    background-image: url("https://res.cloudinary.com/dcoviwlpx/image/upload/v1742293855/bg2_haubv8.jpg");
+    background-repeat: no-repeat; /* Ngăn hình ảnh nền lặp lại */
+    background-size: cover;
+    position: relative;
+    color: white;
+    box-sizing: border-box;
+    border-radius: 10px;
 
     .card_movie {
       margin-left: 80px;
+      margin-top: 10px;
       img {
         height: 400px;
         width: 80%;
@@ -21,6 +29,7 @@
       }
     }
     .card_inf {
+      margin-top: 20px;
       h2 {
         margin-bottom: 20px;
       }
