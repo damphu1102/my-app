@@ -8,13 +8,13 @@ import { Cinema } from "../../CinemaModal/Cinema";
 
 export const MovieInf = () => {
   const [movie, setMovie] = useState("");
-  const { id } = useParams();
+  const { movie_id } = useParams();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const url = `http://localhost:8080/movie/${id}`;
+        const url = `http://localhost:8080/movie/${movie_id}`;
         const response = await axios.get(url);
         setMovie(response.data);
       } catch (error) {
@@ -24,15 +24,11 @@ export const MovieInf = () => {
 
     fetchMovie();
     window.scrollTo(0, 0);
-  }, [id]);
+  }, [movie_id]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(true);
-  };
-
-  const handleNext = () => {
-    setShow(false);
   };
 
   return (
@@ -74,7 +70,12 @@ export const MovieInf = () => {
           <CardTabMovie />
         </div>
       </div>
-      <Cinema show={show} handleClose={handleClose} handleNext={handleNext} />
+      <Cinema
+        show={show}
+        key={movie_id}
+        handleClose={handleClose}
+        movie={movie}
+      />
     </div>
   );
 };

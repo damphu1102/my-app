@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
@@ -18,7 +19,7 @@ export const CardMovie = ({ movie }) => {
             <p>Thể loại: {movie.genre}</p>
             <p>Thời lượng: {movie.duration} phút</p>
           </Card.Text>
-          <Link to={`/movieInf/${movie.id}`}>
+          <Link to={`/movieInf/${movie.movie_id}`}>
             <Button variant="primary" className="button">
               Chi tiết phim
             </Button>
@@ -79,7 +80,6 @@ export const CardTabMovie = () => {
         console.error("Error fetching movies:", error);
       }
     };
-    window.scrollTo(0, 0);
     fetchMovies();
   }, [filterStatus]);
 
@@ -107,7 +107,7 @@ export const CardTabMovie = () => {
       <div className="tab_list">
         {movies.length > 0 ? (
           movies.map((movie) => (
-            <Link to={`/movieInf/${movie.id}`}>
+            <Link to={`/movieInf/${movie.movie_id}`}>
               <div key={movie.id} className="data">
                 <img src={movie.image} alt={movie.movieName} />
                 <div className="list_data">
@@ -121,6 +121,131 @@ export const CardTabMovie = () => {
           <p>Không có phim yêu cầu</p>
         )}
       </div>
+    </>
+  );
+};
+
+export const CardModalShowTime = ({
+  show,
+  cinemas,
+  modalTitle,
+  modalContent,
+  handleLocationChange,
+  handleCinemaChange,
+  handleCloseAndReset,
+  handleNextClick,
+  selectedLocation,
+  handleBackClick,
+  selectedCinema,
+  showTimes,
+  activeTime,
+  handleDateChange,
+  handleTimeClick,
+  handleNextSeatPage,
+}) => {
+  return (
+    <>
+      <Modal show={show} centered size="md" onHide={handleCloseAndReset}>
+        <Modal.Header>
+          <Modal.Title>{modalTitle}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {modalContent === "cinema" ? (
+            <>
+              {/* Location */}
+              <Form.Select
+                aria-label="Default select example"
+                onChange={handleLocationChange}
+                value={selectedLocation}
+              >
+                <option value="">--Chọn khu vực---</option>
+                <option value="HaNoi">HaNoi</option>
+                <option value="DaNang">DaNang</option>
+                <option value="HoChiMinh">HoChiMinh</option>
+              </Form.Select>
+              {/* CinemaName */}
+              {selectedLocation && cinemas.length > 0 && (
+                <Form.Select
+                  aria-label="Cinema select"
+                  onChange={handleCinemaChange}
+                  value={selectedCinema}
+                >
+                  <option value="">--Chọn rạp phim---</option>
+                  {cinemas.map((cinema) => (
+                    <option key={cinema.id} value={cinema.id}>
+                      {cinema.cinemaName}
+                    </option>
+                  ))}
+                </Form.Select>
+              )}
+            </>
+          ) : (
+            <div className="container_showtime">
+              <Form.Group className="mb-3">
+                <Form.Label>Chọn ngày:</Form.Label>
+                <Form.Control type="date" onChange={handleDateChange} />
+              </Form.Group>
+              <Form.Label>Chọn giờ chiếu:</Form.Label>
+              <div
+                className="button_date"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 0.5fr)",
+                  placeItems: "center",
+                }}
+              >
+                {showTimes.length > 0 ? (
+                  showTimes.map((showTime) => (
+                    <div
+                      key={showTime.id}
+                      className="list_button"
+                      style={{ padding: "10px 0px" }}
+                    >
+                      <Button
+                        onClick={() => handleTimeClick(showTime.time)} // Thêm onClick handler
+                        style={{
+                          backgroundColor:
+                            activeTime === showTime.time
+                              ? "lightblue"
+                              : "white", // Thêm inline style
+                          color:
+                            activeTime === showTime.time ? "black" : "black", // Thêm inline style
+                        }}
+                      >
+                        {showTime.time}
+                      </Button>
+                    </div>
+                  ))
+                ) : (
+                  <p>Không có giờ chiếu nào vào ngày này.</p> // Hiển thị thông báo nếu không có showtimes
+                )}
+              </div>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          {modalContent === "cinema" ? (
+            <>
+              <Button variant="secondary" onClick={handleCloseAndReset}>
+                Close
+              </Button>
+              <Button variant="success" onClick={handleNextClick}>
+                Next
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="secondary" onClick={handleBackClick}>
+                Back
+              </Button>
+
+              <Button variant="success" onClick={handleNextSeatPage}>
+                Next
+              </Button>
+            </>
+          )}
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
