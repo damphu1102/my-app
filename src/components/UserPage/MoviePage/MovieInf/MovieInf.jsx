@@ -3,12 +3,13 @@ import "../MovieInf/movieinf.scss";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { CardTabMovie } from "../../../Cards/Card";
+import { Cinema } from "../../CinemaModal/Cinema";
 
 export const MovieInf = () => {
   const [movie, setMovie] = useState("");
-  const [movies, setMovies] = useState([]);
   const { id } = useParams();
-  const [filterStatus, setFilterStatus] = useState("showingNow"); // Trạng thái mặc định
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -25,31 +26,23 @@ export const MovieInf = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const url = `http://localhost:8080/movie/filter?statusMovie=${filterStatus}`;
-        const response = await axios.get(url);
-        setMovies(response.data);
-      } catch (error) {
-        console.error("Error fetching movies:", error);
-      }
-    };
-    fetchMovies();
-  }, [filterStatus]);
-
-  const handleClick = (status) => {
-    setFilterStatus(status);
+  const handleClose = () => setShow(false);
+  const handleShow = () => {
+    setShow(true);
   };
 
-  console.log(filterStatus);
+  const handleNext = () => {
+    setShow(false);
+  };
 
   return (
     <div className="container_movieInf">
       <div className="content_card">
         <div className="card_movie">
           <img src={movie.image} alt={movie.movieName} />
-          <Button variant="outline-primary">Đặt vé</Button>
+          <Button variant="outline-primary" onClick={handleShow}>
+            Đặt vé
+          </Button>
         </div>
         <div className="card_inf">
           <h2>{movie.movieName}</h2>
@@ -78,42 +71,10 @@ export const MovieInf = () => {
         </div>
 
         <div className="tab_movie">
-          <div className=" tab_btn">
-            <Button
-              onClick={() => handleClick("comingSoon")}
-              className={`coming ${
-                filterStatus === "comingSoon" ? "active" : ""
-              }`}
-            >
-              PHIM SẮP CHIẾU
-            </Button>
-
-            <Button
-              onClick={() => handleClick("showingNow")}
-              className={`showing ${
-                filterStatus === "showingNow" ? "active" : ""
-              }`}
-            >
-              PHIM ĐANG CHIẾU
-            </Button>
-          </div>
-          <div className="tab_list">
-            {movies.length > 0 ? (
-              movies.map((movie) => (
-                <div key={movie.id} className="data">
-                  <img src={movie.image} alt={movie.movieName} />
-                  <div className="list_data">
-                    <h5>{movie.movieName}</h5>
-                    <p>{movie.genre}</p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>Không có phim yêu cầu</p>
-            )}
-          </div>
+          <CardTabMovie />
         </div>
       </div>
+      <Cinema show={show} handleClose={handleClose} handleNext={handleNext} />
     </div>
   );
 };

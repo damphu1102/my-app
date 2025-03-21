@@ -1,11 +1,10 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const CardMovie = ({ movie }) => {
-  const location = useLocation();
-
   return (
     <>
       <Card style={{ width: "20rem" }}>
@@ -19,10 +18,7 @@ export const CardMovie = ({ movie }) => {
             <p>Thể loại: {movie.genre}</p>
             <p>Thời lượng: {movie.duration} phút</p>
           </Card.Text>
-          <Link
-            to={`/movieInf/${movie.id}`}
-            active={location.pathname === "/movie"}
-          >
+          <Link to={`/movieInf/${movie.id}`}>
             <Button variant="primary" className="button">
               Chi tiết phim
             </Button>
@@ -64,6 +60,66 @@ export const CardButtonMovie = ({ onFilter }) => {
         >
           SUẤT CHIẾU ĐẶC BIỆT
         </Button>
+      </div>
+    </>
+  );
+};
+
+export const CardTabMovie = () => {
+  const [movies, setMovies] = useState([]);
+  const [filterStatus, setFilterStatus] = useState("showingNow"); // Trạng thái mặc định
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const url = `http://localhost:8080/movie/filter?statusMovie=${filterStatus}`;
+        const response = await axios.get(url);
+        setMovies(response.data);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      }
+    };
+    window.scrollTo(0, 0);
+    fetchMovies();
+  }, [filterStatus]);
+
+  const handleClick = (status) => {
+    setFilterStatus(status);
+  };
+
+  return (
+    <>
+      <div className=" tab_btn">
+        <Button
+          onClick={() => handleClick("comingSoon")}
+          className={`coming ${filterStatus === "comingSoon" ? "active" : ""}`}
+        >
+          PHIM SẮP CHIẾU
+        </Button>
+
+        <Button
+          onClick={() => handleClick("showingNow")}
+          className={`showing ${filterStatus === "showingNow" ? "active" : ""}`}
+        >
+          PHIM ĐANG CHIẾU
+        </Button>
+      </div>
+      <div className="tab_list">
+        {movies.length > 0 ? (
+          movies.map((movie) => (
+            <Link to={`/movieInf/${movie.id}`}>
+              <div key={movie.id} className="data">
+                <img src={movie.image} alt={movie.movieName} />
+                <div className="list_data">
+                  <h5>{movie.movieName}</h5>
+                  <p>{movie.genre}</p>
+                </div>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <p>Không có phim yêu cầu</p>
+        )}
       </div>
     </>
   );

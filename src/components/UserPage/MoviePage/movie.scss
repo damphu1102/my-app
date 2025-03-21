@@ -1,5 +1,6 @@
 .container_movie {
   margin-top: 110px;
+  min-height: 100vh;
   .movie {
     display: grid;
     grid-template-columns: repeat(4, minmax(240px, 1fr));
