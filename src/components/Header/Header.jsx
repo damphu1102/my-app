@@ -11,7 +11,7 @@ export const Header = () => {
             <img
               src="https://res.cloudinary.com/dcoviwlpx/image/upload/v1740830902/HP-removebg-preview_birxc6.png"
               alt="Logo"
-              height="200px"
+              width="120px"
             />
           </Link>
         </div>

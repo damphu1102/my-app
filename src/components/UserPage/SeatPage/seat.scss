@@ -6,11 +6,69 @@
   border: 1px solid rgb(220, 208, 208);
   border-radius: 10px;
   display: grid;
-  grid-template-columns: 4fr 1fr;
+  grid-template-columns: 3fr 1fr;
 
   .seat_left {
-    margin-left: 10px;
+    h3 {
+      text-align: center;
+      margin: 20px 0px;
+    }
+
+    .status_seat {
+      margin: 30px 0px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      place-items: center;
+      border-bottom: 1px solid rgb(220, 208, 208);
+
+      img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+        margin-bottom: 20px;
+      }
+      .status {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .screen {
+      img {
+        width: 80%;
+        margin: 0 10%;
+      }
+    }
+
+    .row_seat {
+      margin: 10px 120px;
+      .container_row {
+        cursor: pointer;
+        display: inline-block;
+
+        img {
+          width: 60px;
+          height: 50px;
+          display: block;
+        }
+
+        p {
+          position: relative; /* Đặt vị trí tuyệt đối so với container */
+          top: -50%;
+          right: -25%;
+          z-index: 1; /* Đặt z-index cao hơn ảnh */
+          /* Các thuộc tính CSS khác cho thẻ p */
+        }
+      }
+    }
+    .time_out {
+      font-size: 1.2rem;
+      font-weight: bold;
+      float: right;
+      margin-right: 120px;
+    }
   }
+
   .seat_right {
     border-left: 1px solid rgb(220, 208, 208);
     .inf_showtime {

@@ -108,7 +108,7 @@ export const CardTabMovie = () => {
         {movies.length > 0 ? (
           movies.map((movie) => (
             <Link to={`/movieInf/${movie.movie_id}`}>
-              <div key={movie.id} className="data">
+              <div key={movie.movie_id} className="data">
                 <img src={movie.image} alt={movie.movieName} />
                 <div className="list_data">
                   <h5>{movie.movieName}</h5>
@@ -172,7 +172,7 @@ export const CardModalShowTime = ({
                 >
                   <option value="">--Chọn rạp phim---</option>
                   {cinemas.map((cinema) => (
-                    <option key={cinema.id} value={cinema.id}>
+                    <option key={cinema.cinema_id} value={cinema.cinemaName}>
                       {cinema.cinemaName}
                     </option>
                   ))}
@@ -197,7 +197,7 @@ export const CardModalShowTime = ({
                 {showTimes.length > 0 ? (
                   showTimes.map((showTime) => (
                     <div
-                      key={showTime.id}
+                      key={showTime.showtime_id}
                       className="list_button"
                       style={{ padding: "10px 0px" }}
                     >

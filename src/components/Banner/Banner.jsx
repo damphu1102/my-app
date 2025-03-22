@@ -23,11 +23,11 @@ export const Banner = () => {
       <Carousel data-bs-theme="dark" className="movie">
         {banners.length > 0 ? (
           banners.map((banner) => (
-            <Carousel.Item key={banner.id}>
+            <Carousel.Item key={banner.banner_id}>
               <img
                 className="d-block w-100"
                 src={banner.imageURL}
-                alt={`Banner ${banner.id}`}
+                alt={`Banner ${banner.banner_id}`}
                 style={{
                   borderRadius: "10px", // Bo góc
                   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Đổ bóng

@@ -15,6 +15,11 @@ export const Cinema = ({ show, handleClose, movie }) => {
   const [activeTime, setActiveTime] = useState("");
   const navigate = useNavigate(); // Khởi tạo useNavigate
 
+  // Lọc roomShow dựa trên date và activeTime
+  const filteredRoomShows = showTimes
+    .filter((showtime) => showtime.time === activeTime)
+    .map((showtime) => showtime.roomShow);
+
   useEffect(() => {
     const fetchCinemas = async () => {
       if (selectedLocation) {
@@ -92,9 +97,9 @@ export const Cinema = ({ show, handleClose, movie }) => {
         selectedCinema: selectedCinema,
         date: date,
         activeTime: activeTime,
+        room: filteredRoomShows,
       };
       navigate("/seat", { state: dataShowTime }); // Truyền dataShowTime vào state
-      console.log("trang tiếp theo", selectedCinema);
     } else {
       alert("Vui lòng chọn đủ ngày giờ");
     }
