@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -143,6 +143,29 @@ export const CardModalShowTime = ({
   handleTimeClick,
   handleNextSeatPage,
 }) => {
+  const [dates, setDates] = useState([]); // Thêm state dates
+  const [selectedDate, setSelectedDate] = useState(""); // Thêm state selectedDate
+  const handleDateSelect = useCallback(
+    (e) => {
+      // Sử dụng useCallback
+      setSelectedDate(e.target.value);
+      handleDateChange(e);
+    },
+    [handleDateChange]
+  ); // Thêm handleDateChange vào dependencies
+
+  useEffect(() => {
+    // Lấy danh sách ngày duy nhất từ showTimes
+    if (showTimes && showTimes.length > 0) {
+      const uniqueDates = Array.from(
+        new Set(showTimes.map((showTime) => showTime.date))
+      );
+      setDates(uniqueDates);
+    } else {
+      setDates([]);
+    }
+  }, [showTimes]);
+
   return (
     <>
       <Modal show={show} centered size="md" onHide={handleCloseAndReset}>
@@ -183,43 +206,57 @@ export const CardModalShowTime = ({
             <div className="container_showtime">
               <Form.Group className="mb-3">
                 <Form.Label>Chọn ngày:</Form.Label>
-                <Form.Control type="date" onChange={handleDateChange} />
+                <Form.Select onChange={handleDateSelect} value={selectedDate}>
+                  <option value="">--Chọn ngày---</option>
+                  {dates.map((date) => (
+                    <option key={date} value={date}>
+                      {date}
+                    </option>
+                  ))}
+                </Form.Select>
               </Form.Group>
               <Form.Label>Chọn giờ chiếu:</Form.Label>
-              <div
-                className="button_date"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 0.5fr)",
-                  placeItems: "center",
-                }}
-              >
-                {showTimes.length > 0 ? (
-                  showTimes.map((showTime) => (
-                    <div
-                      key={showTime.showtime_id}
-                      className="list_button"
-                      style={{ padding: "10px 0px" }}
-                    >
-                      <Button
-                        onClick={() => handleTimeClick(showTime.time)} // Thêm onClick handler
-                        style={{
-                          backgroundColor:
-                            activeTime === showTime.time
-                              ? "lightblue"
-                              : "white", // Thêm inline style
-                          color:
-                            activeTime === showTime.time ? "black" : "black", // Thêm inline style
-                        }}
-                      >
-                        {showTime.time}
-                      </Button>
-                    </div>
-                  ))
-                ) : (
-                  <p>Không có giờ chiếu nào vào ngày này.</p> // Hiển thị thông báo nếu không có showtimes
-                )}
-              </div>
+
+              {selectedDate !== "" ? (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-evenly",
+                    }}
+                  >
+                    {showTimes.length > 0 ? (
+                      showTimes.map((showTime) => (
+                        <div
+                          key={showTime.showtime_id}
+                          className="list_button"
+                          style={{ padding: "10px 0px" }}
+                        >
+                          <Button
+                            onClick={() => handleTimeClick(showTime.time)} // Thêm onClick handler
+                            style={{
+                              backgroundColor:
+                                activeTime === showTime.time
+                                  ? "lightblue"
+                                  : "white", // Thêm inline style
+                              color:
+                                activeTime === showTime.time
+                                  ? "black"
+                                  : "black", // Thêm inline style
+                            }}
+                          >
+                            {showTime.time}
+                          </Button>
+                        </div>
+                      ))
+                    ) : (
+                      <p>Không có giờ chiếu nào vào ngày này.</p> // Hiển thị thông báo nếu không có showtimes
+                    )}
+                  </div>
+                </>
+              ) : (
+                <p>Chưa có giờ tương ứng</p>
+              )}
             </div>
           )}
         </Modal.Body>

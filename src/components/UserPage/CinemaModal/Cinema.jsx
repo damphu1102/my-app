@@ -40,17 +40,19 @@ export const Cinema = ({ show, handleClose, movie }) => {
 
   useEffect(() => {
     const fetchShowTime = async () => {
-      if (date) {
-        // Kiểm tra nếu date có giá trị
-        try {
-          const url = `http://localhost:8080/showtime/filter?date=${date}`;
-          const response = await axios.get(url);
-          setShowTimes(response.data);
-        } catch (error) {
-          console.error("Error fetching movie:", error);
+      try {
+        let url = `http://localhost:8080/showtime`; // URL mặc định để lấy tất cả showtimes
+
+        if (date) {
+          // Nếu date có giá trị, thêm tham số truy vấn để lọc theo ngày
+          url = `http://localhost:8080/showtime/filter?date=${date}`;
         }
-      } else {
-        setShowTimes([]); // Reset showTimes nếu date rỗng
+
+        const response = await axios.get(url);
+        setShowTimes(response.data);
+      } catch (error) {
+        console.error("Error fetching showtimes:", error);
+        setShowTimes([]); // Reset showTimes nếu có lỗi
       }
     };
 
@@ -59,6 +61,7 @@ export const Cinema = ({ show, handleClose, movie }) => {
 
   const handleDateChange = (event) => {
     setDate(event.target.value);
+    setActiveTime("");
   };
 
   const handleTimeClick = (time) => {
@@ -100,6 +103,7 @@ export const Cinema = ({ show, handleClose, movie }) => {
         room: filteredRoomShows,
       };
       navigate("/seat", { state: dataShowTime }); // Truyền dataShowTime vào state
+      window.scrollTo(0, 0);
     } else {
       alert("Vui lòng chọn đủ ngày giờ");
     }
@@ -129,8 +133,6 @@ export const Cinema = ({ show, handleClose, movie }) => {
         handleDateChange={handleDateChange}
         handleTimeClick={handleTimeClick}
         handleNextSeatPage={handleNextSeatPage}
-        movie={movie}
-        date={date}
       />
     </div>
   );

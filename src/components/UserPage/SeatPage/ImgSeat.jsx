@@ -24,13 +24,6 @@ export const ImgSeat = () => {
       </div>
       <div className="status">
         <img
-          src="https://res.cloudinary.com/dcoviwlpx/image/upload/v1731809663/seat-set-normal_mmdu0h.png"
-          alt="is_locked"
-        />
-        <p>Đã đặt trước</p>
-      </div>
-      <div className="status">
-        <img
           src="https://res.cloudinary.com/dcoviwlpx/image/upload/v1731809662/seat-buy-normal_ryk3xl.png"
           alt="success"
         />

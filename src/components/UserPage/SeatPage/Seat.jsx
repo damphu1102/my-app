@@ -76,6 +76,21 @@ export const Seat = () => {
     );
   };
 
+  const handleNextClick = () => {
+    // Lấy danh sách ghế đã chọn và tính tổng giá
+    const selectedSeatsInfo = selectedSeats.map((seat) => ({
+      seatNumber: seat.seatNumber,
+    }));
+    // Tính tổng giá
+    const totalPrice = selectedSeats.reduce(
+      (total, seat) => total + seat.seatPrice,
+      0
+    );
+
+    // Log ra console
+    console.log(selectedSeatsInfo, totalPrice);
+  };
+
   return (
     <div className="seat_container">
       <div className="seat_left">
@@ -142,6 +157,7 @@ export const Seat = () => {
         <Button
           variant="success"
           style={{ width: "50%", marginLeft: "25%", marginBottom: "10px" }}
+          onClick={handleNextClick()} // Thêm sự kiện onClick
         >
           Next
         </Button>
