@@ -48,7 +48,7 @@ export const ModalMovie = ({
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/movie/delete/${movieToEdit.id}`
+        `http://localhost:8080/movie/delete/${movieToEdit.movieId}`
       );
       if (response.status === 200) {
         alert("Xóa phim thành công!");
@@ -66,7 +66,7 @@ export const ModalMovie = ({
       let response;
       if (isEditMode && movieToEdit) {
         response = await axios.put(
-          `http://localhost:8080/movie/update/${movieToEdit.id}`,
+          `http://localhost:8080/movie/update/${movieToEdit.movieId}`,
           {
             ...newMovie,
             updateDate: updateAt,

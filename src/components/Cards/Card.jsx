@@ -19,7 +19,7 @@ export const CardMovie = ({ movie }) => {
             <p>Thể loại: {movie.genre}</p>
             <p>Thời lượng: {movie.duration} phút</p>
           </Card.Text>
-          <Link to={`/movieInf/${movie.movie_id}`}>
+          <Link to={`/movieInf/${movie.movieId}`}>
             <Button variant="primary" className="button">
               Chi tiết phim
             </Button>
@@ -107,8 +107,8 @@ export const CardTabMovie = () => {
       <div className="tab_list">
         {movies.length > 0 ? (
           movies.map((movie) => (
-            <Link to={`/movieInf/${movie.movie_id}`}>
-              <div key={movie.movie_id} className="data">
+            <Link to={`/movieInf/${movie.movieId}`}>
+              <div key={movie.movieId} className="data">
                 <img src={movie.image} alt={movie.movieName} />
                 <div className="list_data">
                   <h5>{movie.movieName}</h5>
@@ -166,9 +166,20 @@ export const CardModalShowTime = ({
     }
   }, [showTimes]);
 
+  // Sửa đổi hàm handleCloseAndReset
+  const handleCloseAndResetWithDateReset = () => {
+    setSelectedDate(""); // Reset selectedDate về ""
+    handleCloseAndReset(); // Gọi handleCloseAndReset từ props
+  };
+
   return (
     <>
-      <Modal show={show} centered size="md" onHide={handleCloseAndReset}>
+      <Modal
+        show={show}
+        centered
+        size="md"
+        onHide={handleCloseAndResetWithDateReset}
+      >
         <Modal.Header>
           <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
@@ -195,7 +206,7 @@ export const CardModalShowTime = ({
                 >
                   <option value="">--Chọn rạp phim---</option>
                   {cinemas.map((cinema) => (
-                    <option key={cinema.cinema_id} value={cinema.cinemaName}>
+                    <option key={cinema.cinemaId} value={cinema.cinemaName}>
                       {cinema.cinemaName}
                     </option>
                   ))}
@@ -221,14 +232,15 @@ export const CardModalShowTime = ({
                 <>
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "space-evenly",
+                      display: "grid",
+                      gridTemplateColumns: "repeat(3, 1fr)",
+                      placeItems: "center",
                     }}
                   >
                     {showTimes.length > 0 ? (
                       showTimes.map((showTime) => (
                         <div
-                          key={showTime.showtime_id}
+                          key={showTime.showtimeId}
                           className="list_button"
                           style={{ padding: "10px 0px" }}
                         >
@@ -263,7 +275,10 @@ export const CardModalShowTime = ({
         <Modal.Footer>
           {modalContent === "cinema" ? (
             <>
-              <Button variant="secondary" onClick={handleCloseAndReset}>
+              <Button
+                variant="secondary"
+                onClick={handleCloseAndResetWithDateReset}
+              >
                 Close
               </Button>
               <Button variant="success" onClick={handleNextClick}>

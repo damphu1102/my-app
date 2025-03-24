@@ -8,13 +8,13 @@ import { Cinema } from "../../CinemaModal/Cinema";
 
 export const MovieInf = () => {
   const [movie, setMovie] = useState("");
-  const { movie_id } = useParams();
+  const { movieId } = useParams();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const url = `http://localhost:8080/movie/${movie_id}`;
+        const url = `http://localhost:8080/movie/${movieId}`;
         const response = await axios.get(url);
         setMovie(response.data);
       } catch (error) {
@@ -24,7 +24,7 @@ export const MovieInf = () => {
 
     fetchMovie();
     window.scrollTo(0, 0);
-  }, [movie_id]);
+  }, [movieId]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -72,7 +72,7 @@ export const MovieInf = () => {
       </div>
       <Cinema
         show={show}
-        key={movie_id}
+        key={movieId}
         handleClose={handleClose}
         movie={movie}
       />

@@ -16,7 +16,7 @@ export const MovieManager = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1); // Trang hiện tại
   const [pageSize, setPageSize] = useState(5); // Kích thước trang
-  const [sortField, setSortField] = useState("id"); // Trường sắp xếp mặc định
+  const [sortField, setSortField] = useState("movieId"); // Trường sắp xếp mặc định
   const [sortType, setSortType] = useState("DESC"); // Loại sắp xếp mặc định
   const [totalPages, setTotalPages] = useState(0); // Thêm state totalPages
 
@@ -78,6 +78,8 @@ export const MovieManager = () => {
   //   setSortType(newType);
   //   setPage(1); // Reset page to 1 when changing sort type
   // };
+
+  console.log(movies);
 
   return (
     <div className="content_page">

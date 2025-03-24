@@ -23,9 +23,7 @@ export const Movie = () => {
     <div className="container_movie">
       <div className="movie">
         {movies.length > 0 ? (
-          movies.map((movie) => (
-            <CardMovie key={movie.movie_id} movie={movie} />
-          ))
+          movies.map((movie) => <CardMovie key={movie.movieId} movie={movie} />)
         ) : (
           <p>Không có phim yêu cầu</p>
         )}
