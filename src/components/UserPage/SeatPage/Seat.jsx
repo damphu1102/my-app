@@ -1,15 +1,18 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../SeatPage/seat.scss";
 import { Button } from "react-bootstrap";
 import { ImgSeat } from "./ImgSeat";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Timeout } from "../Timeout/Timeout";
 
 export const Seat = () => {
   const location = useLocation();
   const data = location.state;
   const [rowSeat, setRowSeat] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]); // Sử dụng useState để lưu danh sách ghế đã chọn
+  const navigate = useNavigate(); // Khởi tạo useNavigate
+  const [remainingTime, setRemainingTime] = useState(600); // 10 phút
 
   useEffect(() => {
     const fetchRowSeat = async () => {
@@ -76,19 +79,43 @@ export const Seat = () => {
     );
   };
 
-  const handleNextClick = () => {
-    // Lấy danh sách ghế đã chọn và tính tổng giá
+  const handleDataNext = () => {
     const selectedSeatsInfo = selectedSeats.map((seat) => ({
       seatNumber: seat.seatNumber,
     }));
-    // Tính tổng giá
-    const totalPrice = selectedSeats.reduce(
+    const totalPriceSeat = selectedSeats.reduce(
       (total, seat) => total + seat.seatPrice,
       0
     );
+    return { selectedSeatsInfo, totalPriceSeat };
+  };
 
-    // Log ra console
-    console.log(selectedSeatsInfo, totalPrice);
+  const handleNextButtonClick = () => {
+    if (selectedSeats.length === 0) {
+      alert("Vui lòng chọn ghế trước khi tiếp tục.");
+      return; // Ngăn chặn việc chuyển hướng nếu không có ghế nào được chọn
+    }
+    const { selectedSeatsInfo, totalPriceSeat } = handleDataNext();
+    navigate("/service", {
+      state: {
+        ...data,
+        selectedSeatsInfo,
+        totalPriceSeat,
+        remainingTime: remainingTime, // Truyền thời gian còn lại
+      },
+    });
+    window.scrollTo(0, 0);
+  };
+
+  const handleTimeout = () => {
+    // Xử lý khi hết thời gian, ví dụ: hiển thị thông báo, chuyển hướng, v.v.
+    alert("Thời gian đặt vé đã hết!");
+    // Ví dụ chuyển hướng về trang chủ
+    navigate("/");
+  };
+
+  const handleTimeChange = (time) => {
+    setRemainingTime(time);
   };
 
   return (
@@ -129,7 +156,11 @@ export const Seat = () => {
           ))}
         </div>
         <div className="time_out">
-          <p>Thời gian đặt vé: </p>
+          <Timeout
+            onTimeout={handleTimeout}
+            initialTime={remainingTime}
+            onTimeChange={handleTimeChange}
+          />
         </div>
       </div>
 
@@ -157,7 +188,7 @@ export const Seat = () => {
         <Button
           variant="success"
           style={{ width: "50%", marginLeft: "25%", marginBottom: "10px" }}
-          onClick={handleNextClick()} // Thêm sự kiện onClick
+          onClick={handleNextButtonClick} // Thêm sự kiện onClick
         >
           Next
         </Button>

@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../ServicePage/service.scss";
 import { Button, Form } from "react-bootstrap";
 import { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import {
   CardInfService,
   CardInfVoucher,
 } from "../../Cards/Card";
+import { Timeout } from "../Timeout/Timeout";
 
 export const Service = () => {
   const location = useLocation();
@@ -18,6 +19,10 @@ export const Service = () => {
   const [vouchers, setVouchers] = useState([]);
   const [voucherPrices, setVoucherPrices] = useState({}); // Tạo state để lưu trữ giá dịch vụ
   const [selectedVoucherId, setSelectedVoucherId] = useState(null);
+  const [remainingTime, setRemainingTime] = useState(data.remainingTime); // Lấy thời gian từ data
+  const navigate = useNavigate(); // Khởi tạo useNavigate
+
+  console.log(data);
 
   useEffect(() => {
     const fetchService = async () => {
@@ -87,6 +92,16 @@ export const Service = () => {
     ? voucherPrices[selectedVoucherId] || 0
     : 0;
 
+  const handleTimeout = () => {
+    alert("Thời gian đặt vé đã hết!");
+    // Xử lý khi hết thời gian, ví dụ: chuyển hướng về trang chủ
+    navigate("/");
+  };
+
+  const handleTimeChange = (time) => {
+    setRemainingTime(time);
+  };
+
   return (
     <div className="service_container">
       <div className="service">
@@ -131,7 +146,11 @@ export const Service = () => {
           </div>
         </div>
         <div className="time_out">
-          <p>Thời gian đặt vé: </p>
+          <Timeout
+            initialTime={remainingTime}
+            onTimeout={handleTimeout}
+            onTimeChange={handleTimeChange}
+          />
         </div>
       </div>
       <div className="inf">
