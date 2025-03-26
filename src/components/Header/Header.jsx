@@ -1,8 +1,25 @@
 import { Link } from "react-router-dom";
 import "../Header/header.scss";
 import { Menu } from "./Navbar";
+import { Login } from "../ModalLogin/Login";
+import { useState } from "react";
+import { Register } from "../ModalLogin/Register";
 
 export const Header = () => {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
+  const handleCloseLogin = () => setShowLogin(false);
+  const handleShowLogin = () => setShowLogin(true);
+  const handleShowRegister = () => {
+    handleCloseLogin();
+    setShowRegister(true);
+  };
+  const handleCloseRegister = () => setShowRegister(false);
+  const handleBackLogin = () => {
+    handleCloseRegister();
+    handleShowLogin();
+  };
   return (
     <div className="container_header">
       <div className="content">
@@ -19,9 +36,19 @@ export const Header = () => {
           <Menu />
         </div>
         <div className="login">
-          <button>Login</button>
+          <button onClick={handleShowLogin}>Login</button>
         </div>
       </div>
+      <Login
+        show={showLogin}
+        onHide={handleCloseLogin}
+        onRegister={handleShowRegister}
+      />
+      <Register
+        show={showRegister}
+        onHide={handleCloseRegister}
+        onBack={handleBackLogin}
+      />
     </div>
   );
 };

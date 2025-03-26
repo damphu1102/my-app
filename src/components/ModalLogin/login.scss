@@ -1,0 +1,68 @@
+.modal-header {
+  border-bottom: none;
+}
+.modal-body {
+  border-bottom: none;
+  .btn_login {
+    button {
+      width: 100%;
+    }
+  }
+}
+.modal-footer {
+  border-top: none;
+  justify-content: center;
+  p {
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+  }
+}
+.login_link {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  img {
+    margin-left: 10px;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+  }
+}
+.forget_pass {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  p {
+    color: blue;
+    cursor: pointer;
+    font-weight: bold;
+  }
+}
+.register {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  p {
+    font-weight: bold;
+    span {
+      color: blue;
+      cursor: pointer;
+    }
+  }
+}
+.mb-3 {
+  position: relative; // Đặt position relative cho form group
+  .eyes {
+    position: absolute; // Định vị tuyệt đối
+    top: 70%; // Căn giữa theo chiều dọc
+    right: 10px; // Đặt bên phải 10px
+    transform: translateY(-50%); // Điều chỉnh vị trí theo chiều dọc
+    cursor: pointer; // Hiển thị con trỏ tay khi di chuột qua
+    z-index: 1; // Đảm bảo icon nằm trên input
+  }
+
+  .form-control {
+    padding-right: 30px; // Tạo khoảng trống cho icon
+  }
+}
