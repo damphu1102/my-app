@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import { CiCircleMinus, CiCirclePlus } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
 export const CardMovie = ({ movie }) => {
@@ -298,6 +299,95 @@ export const CardModalShowTime = ({
           )}
         </Modal.Footer>
       </Modal>
+    </>
+  );
+};
+
+export const CardInfAccount = () => {
+  return (
+    <>
+      <div className="inf_account">
+        <div className="label">
+          <label>Thông tin tài khoản</label>
+        </div>
+        <div className="label_account">
+          <label>Tên</label>
+          <label>Điện thoại</label>
+          <label>Email</label>
+        </div>
+        <div className="input">
+          <input type="text" readOnly disabled></input>
+          <input type="number" readOnly disabled></input>
+          <input type="text" readOnly disabled></input>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export const CardInfService = ({
+  services,
+  quantities,
+  handleDecrement,
+  handleIncrement,
+}) => {
+  return (
+    <>
+      <div className="inf_service">
+        <div className="label">
+          <label>Dịch vụ đi kèm</label>
+        </div>
+        <div className="label_service">
+          <label>Combo</label>
+          <label>Mô tả</label>
+          <label>Số lượng</label>
+        </div>
+        <div className="input">
+          {services.map((service) => (
+            <div key={service.serviceId} className="service-item">
+              <p>{service.nameService}</p>
+              <p>{service.descriptionService}</p>
+              <div className="quantity">
+                <CiCirclePlus
+                  onClick={() => handleIncrement(service.serviceId)}
+                />
+                <input
+                  type="text"
+                  value={quantities[service.serviceId] || 0}
+                  disabled
+                />
+                <CiCircleMinus
+                  onClick={() => handleDecrement(service.serviceId)}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export const CardInfVoucher = ({ vouchers, onVoucherChange }) => {
+  return (
+    <>
+      <div className="label">
+        <label>Mã giảm giá</label>
+      </div>
+      <div className="voucher">
+        <Form.Label>Mã giảm giá</Form.Label>
+        <Form.Select
+          aria-label="Default select example"
+          onChange={(e) => onVoucherChange(e.target.value)}
+        >
+          <option value={null}>Open this select menu</option>
+          {vouchers.map((voucher) => (
+            <option key={voucher.voucherId} value={voucher.voucherId}>
+              {voucher.nameVoucher}
+            </option>
+          ))}
+        </Form.Select>
+      </div>
     </>
   );
 };

@@ -12,6 +12,7 @@ import { DashboardManager } from "./components/AdminPage/ContentPage/DashboardMa
 import { MovieInf } from "./components/UserPage/MoviePage/MovieInf/MovieInf";
 import { Movie } from "./components/UserPage/MoviePage/Movie";
 import { Seat } from "./components/UserPage/SeatPage/Seat";
+import { Service } from "./components/UserPage/ServicePage/Service";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/movieInf/:movie_id",
+        path: "/movieInf/:movieId",
         element: <MovieInf />,
       },
       {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/seat",
         element: <Seat />,
+      },
+      {
+        path: "/service",
+        element: <Service />,
       },
     ],
   },
