@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { CardModalShowTime } from "../../Cards/Card";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
 
 export const Cinema = ({ show, handleClose, movie }) => {
   const [cinemas, setCinemas] = useState([]);
@@ -89,7 +91,15 @@ export const Cinema = ({ show, handleClose, movie }) => {
       setModalTitle("Chọn suất chiếu");
       setModalContent("showtime");
     } else {
-      alert("Vui lòng chọn rạp phim.");
+      toast.warn("Vui lòng chọn rạp để tiếp tục.", {
+        position: "top-right", // Vị trí của toast
+        autoClose: 3000, // Tự động đóng sau 3 giây
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -105,7 +115,15 @@ export const Cinema = ({ show, handleClose, movie }) => {
       navigate("/seat", { state: dataShowTime }); // Truyền dataShowTime vào state
       window.scrollTo(0, 0);
     } else {
-      alert("Vui lòng chọn đủ ngày giờ");
+      toast.warn("Vui lòng chọn giờ chiếu để tiếp tục.", {
+        position: "top-right", // Vị trí của toast
+        autoClose: 3000, // Tự động đóng sau 3 giây
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -134,6 +152,7 @@ export const Cinema = ({ show, handleClose, movie }) => {
         handleTimeClick={handleTimeClick}
         handleNextSeatPage={handleNextSeatPage}
       />
+      <ToastContainer />
     </div>
   );
 };

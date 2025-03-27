@@ -5,6 +5,8 @@ import { ImgSeat } from "./ImgSeat";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Timeout } from "../Timeout/Timeout";
+import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
+import { toast, ToastContainer } from "react-toastify";
 
 export const Seat = () => {
   const location = useLocation();
@@ -92,7 +94,15 @@ export const Seat = () => {
 
   const handleNextButtonClick = () => {
     if (selectedSeats.length === 0) {
-      alert("Vui lòng chọn ghế trước khi tiếp tục.");
+      toast.warn("Vui lòng chọn ghế trước khi tiếp tục.", {
+        position: "top-right", // Vị trí của toast
+        autoClose: 3000, // Tự động đóng sau 3 giây
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       return; // Ngăn chặn việc chuyển hướng nếu không có ghế nào được chọn
     }
     const { selectedSeatsInfo, totalPriceSeat } = handleDataNext();
@@ -109,7 +119,15 @@ export const Seat = () => {
 
   const handleTimeout = () => {
     // Xử lý khi hết thời gian, ví dụ: hiển thị thông báo, chuyển hướng, v.v.
-    alert("Thời gian đặt vé đã hết!");
+    toast.warn("Hết thời gian đặt vé.", {
+      position: "top-right", // Vị trí của toast
+      autoClose: 3000, // Tự động đóng sau 3 giây
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
     // Ví dụ chuyển hướng về trang chủ
     navigate("/");
   };
@@ -192,6 +210,7 @@ export const Seat = () => {
         >
           Next
         </Button>
+        <ToastContainer />
       </div>
     </div>
   );

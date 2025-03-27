@@ -12,7 +12,7 @@ export const Register = ({ show, onHide, onBack }) => {
     <div className="register_container">
       <Modal show={show} centered onHide={onHide}>
         <Modal.Header closeButton>
-          <Modal.Title>Đăng ký</Modal.Title>
+          <Modal.Title style={{ cursor: "default" }}>Đăng ký</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -66,7 +66,7 @@ export const Register = ({ show, onHide, onBack }) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <p>
+          <p style={{ cursor: "default" }}>
             Bạn đã có tài khoản đăng nhập?
             <span onClick={onBack} style={{ color: "blue", cursor: "pointer" }}>
               Đăng nhập
