@@ -2,12 +2,33 @@ import { Link } from "react-router-dom";
 import "../Header/header.scss";
 import { Menu } from "./Navbar";
 import { Login } from "../ModalLogin/Login";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Register } from "../ModalLogin/Register";
+import axios from "axios";
+import { Dropdown } from "react-bootstrap";
+import { ToastContainer } from "react-toastify";
+import { Toast } from "../UserPage/ToastPage";
 
 export const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [login, setLogin] = useState({
+    userName: "",
+    passWord: "",
+  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedInUserName, setLoggedInUserName] = useState("");
+  const [toastMessage, setToastMessage] = useState(null);
+
+  useEffect(() => {
+    const storedIsLoggedIn = localStorage.getItem("isLoggedIn");
+    const storedLoggedInUserName = localStorage.getItem("loggedInUserName");
+
+    if (storedIsLoggedIn === "true") {
+      setIsLoggedIn(true);
+      setLoggedInUserName(storedLoggedInUserName || "");
+    }
+  }, []);
 
   const handleCloseLogin = () => setShowLogin(false);
   const handleShowLogin = () => setShowLogin(true);
@@ -15,11 +36,44 @@ export const Header = () => {
     handleCloseLogin();
     setShowRegister(true);
   };
+
   const handleCloseRegister = () => setShowRegister(false);
   const handleBackLogin = () => {
     handleCloseRegister();
     handleShowLogin();
   };
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/auth/login",
+        login
+      );
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("isLoggedIn", "true"); // Lưu trạng thái đăng nhập
+      localStorage.setItem("loggedInUserName", login.userName); // Lưu userName
+      // Cập nhật trạng thái đăng nhập và userName
+      setIsLoggedIn(true);
+      setLoggedInUserName(login.userName); // Lưu userName
+      // Đóng modal đăng nhập
+      handleCloseLogin();
+      setToastMessage({ message: "Đăng nhập thành công." });
+    } catch (error) {
+      // Xử lý lỗi đăng nhập
+      console.error("Login failed:", error);
+      // Hiển thị thông báo lỗi cho người dùng
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isLoggedIn"); // Xóa trạng thái đăng nhập
+    localStorage.removeItem("loggedInUserName"); // Xóa userName
+    setIsLoggedIn(false);
+    setLoggedInUserName("");
+    setToastMessage({ message: "Đăng xuất thành công." });
+  };
+
   return (
     <div className="container_header">
       <div className="content">
@@ -36,19 +90,44 @@ export const Header = () => {
           <Menu />
         </div>
         <div className="login">
-          <button onClick={handleShowLogin}>Login</button>
+          {isLoggedIn ? (
+            <div className="drop_down">
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  {loggedInUserName}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#">Trang cá nhân</Dropdown.Item>
+                  <Dropdown.Item href="#">Cài đặt</Dropdown.Item>
+                  <Dropdown.Item onClick={handleLogout}>
+                    Đăng xuất
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          ) : (
+            <button onClick={handleShowLogin}>Login</button>
+          )}
         </div>
       </div>
       <Login
         show={showLogin}
         onHide={handleCloseLogin}
         onRegister={handleShowRegister}
+        handleLogin={handleLogin}
+        login={login}
+        setLogin={setLogin}
       />
       <Register
         show={showRegister}
         onHide={handleCloseRegister}
         onBack={handleBackLogin}
       />
+      <ToastContainer />
+      {toastMessage && (
+        <Toast message={toastMessage.message} type={toastMessage.type} />
+      )}
     </div>
   );
 };

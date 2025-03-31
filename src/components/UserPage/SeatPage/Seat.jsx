@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Timeout } from "../Timeout/Timeout";
 import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
-import { toast, ToastContainer } from "react-toastify";
+import { Toast } from "../ToastPage";
 
 export const Seat = () => {
   const location = useLocation();
@@ -15,11 +15,17 @@ export const Seat = () => {
   const [selectedSeats, setSelectedSeats] = useState([]); // Sử dụng useState để lưu danh sách ghế đã chọn
   const navigate = useNavigate(); // Khởi tạo useNavigate
   const [remainingTime, setRemainingTime] = useState(600); // 10 phút
+  const token = localStorage.getItem("token"); // Lấy token từ localStorage
+  const [toastMessage, setToastMessage] = useState(null);
 
   useEffect(() => {
     const fetchRowSeat = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/seat`);
+        const response = await axios.get(`http://localhost:8080/seat`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Gửi token trong header
+          },
+        });
         // Cập nhật dữ liệu từ API để bao gồm thuộc tính 'img'
         const seatsWithImg = response.data.map((seat) => ({
           ...seat,
@@ -35,14 +41,30 @@ export const Seat = () => {
       }
     };
     fetchRowSeat();
-  }, []);
+  }, [token]);
+
+  useEffect(() => {
+    if (toastMessage) {
+      setTimeout(() => {
+        setToastMessage(null);
+      }, 3000);
+    }
+  }, [toastMessage]);
 
   // Lấy danh sách các hàng ghế duy nhất
   const uniqueRows = [...new Set(rowSeat.map((seat) => seat.seatRow))];
 
   const updateSeatStatus = async (seat_id, newStatus) => {
     try {
-      axios.put(`http://localhost:8080/seat/${seat_id}/${newStatus}`);
+      axios.put(
+        `http://localhost:8080/seat/${seat_id}/${newStatus}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Gửi token trong header
+          },
+        }
+      );
     } catch (error) {
       console.error("Error updating seat status:", error);
     }
@@ -94,14 +116,9 @@ export const Seat = () => {
 
   const handleNextButtonClick = () => {
     if (selectedSeats.length === 0) {
-      toast.warn("Vui lòng chọn ghế trước khi tiếp tục.", {
-        position: "top-right", // Vị trí của toast
-        autoClose: 3000, // Tự động đóng sau 3 giây
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+      setToastMessage({
+        message: "Vui lòng chọn ghế trước khi tiếp tục.",
+        type: "warn",
       });
       return; // Ngăn chặn việc chuyển hướng nếu không có ghế nào được chọn
     }
@@ -119,14 +136,9 @@ export const Seat = () => {
 
   const handleTimeout = () => {
     // Xử lý khi hết thời gian, ví dụ: hiển thị thông báo, chuyển hướng, v.v.
-    toast.warn("Hết thời gian đặt vé.", {
-      position: "top-right", // Vị trí của toast
-      autoClose: 3000, // Tự động đóng sau 3 giây
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+    setToastMessage({
+      message: "Hết thời gian đặt vé.",
+      type: "warn",
     });
     // Ví dụ chuyển hướng về trang chủ
     navigate("/");
@@ -210,7 +222,9 @@ export const Seat = () => {
         >
           Next
         </Button>
-        <ToastContainer />
+        {toastMessage && (
+          <Toast message={toastMessage.message} type={toastMessage.type} />
+        )}
       </div>
     </div>
   );

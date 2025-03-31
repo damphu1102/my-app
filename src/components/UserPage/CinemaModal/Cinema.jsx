@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { CardModalShowTime } from "../../Cards/Card";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
+import { Toast } from "../ToastPage";
 
 export const Cinema = ({ show, handleClose, movie }) => {
   const [cinemas, setCinemas] = useState([]);
@@ -16,6 +16,8 @@ export const Cinema = ({ show, handleClose, movie }) => {
   const [date, setDate] = useState("");
   const [activeTime, setActiveTime] = useState("");
   const navigate = useNavigate(); // Khởi tạo useNavigate
+  const [toastMessage, setToastMessage] = useState(null);
+  const token = localStorage.getItem("token"); // Lấy token từ localStorage
 
   // Lọc roomShow dựa trên date và activeTime
   const filteredRoomShows = showTimes
@@ -27,7 +29,12 @@ export const Cinema = ({ show, handleClose, movie }) => {
       if (selectedLocation) {
         try {
           const response = await axios.get(
-            `http://localhost:8080/cinema/filter?locationEnum=${selectedLocation}`
+            `http://localhost:8080/cinema/filter?locationEnum=${selectedLocation}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Gửi token trong header
+              },
+            }
           );
           setCinemas(response.data);
         } catch (error) {
@@ -50,7 +57,11 @@ export const Cinema = ({ show, handleClose, movie }) => {
           url = `http://localhost:8080/showtime/filter?date=${date}`;
         }
 
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Gửi token trong header
+          },
+        });
         setShowTimes(response.data);
       } catch (error) {
         console.error("Error fetching showtimes:", error);
@@ -60,6 +71,14 @@ export const Cinema = ({ show, handleClose, movie }) => {
 
     fetchShowTime();
   }, [date]);
+
+  useEffect(() => {
+    if (toastMessage) {
+      setTimeout(() => {
+        setToastMessage(null);
+      }, 3000);
+    }
+  }, [toastMessage]);
 
   const handleDateChange = (event) => {
     setDate(event.target.value);
@@ -91,14 +110,8 @@ export const Cinema = ({ show, handleClose, movie }) => {
       setModalTitle("Chọn suất chiếu");
       setModalContent("showtime");
     } else {
-      toast.warn("Vui lòng chọn rạp để tiếp tục.", {
-        position: "top-right", // Vị trí của toast
-        autoClose: 3000, // Tự động đóng sau 3 giây
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+      setToastMessage({
+        message: "Vui lòng chọn rạp để tiếp tục.",
       });
     }
   };
@@ -115,14 +128,8 @@ export const Cinema = ({ show, handleClose, movie }) => {
       navigate("/seat", { state: dataShowTime }); // Truyền dataShowTime vào state
       window.scrollTo(0, 0);
     } else {
-      toast.warn("Vui lòng chọn giờ chiếu để tiếp tục.", {
-        position: "top-right", // Vị trí của toast
-        autoClose: 3000, // Tự động đóng sau 3 giây
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+      setToastMessage({
+        message: "Vui lòng chọn giờ chiếu để tiếp tục.",
       });
     }
   };
@@ -152,7 +159,9 @@ export const Cinema = ({ show, handleClose, movie }) => {
         handleTimeClick={handleTimeClick}
         handleNextSeatPage={handleNextSeatPage}
       />
-      <ToastContainer />
+      {toastMessage && (
+        <Toast message={toastMessage.message} type={toastMessage.type} />
+      )}
     </div>
   );
 };

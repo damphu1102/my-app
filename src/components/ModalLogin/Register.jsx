@@ -1,12 +1,34 @@
 import { Button, Form, Modal } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import "../ModalLogin/register.scss";
 
 export const Register = ({ show, onHide, onBack }) => {
   const [passwordVisible, setPasswordVisible] = useState(false); // State để theo dõi trạng thái hiển thị mật khẩu
+  const phoneInputRef = useRef(null); // Tạo một ref cho input phone
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
+  };
+  // Xử lý sự kiện sử dụng mũi tên của input number
+  useEffect(() => {
+    const inputElement = phoneInputRef.current; // Sao chép giá trị vào biến cục bộ
+
+    if (inputElement) {
+      inputElement.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      if (inputElement) {
+        inputElement.removeEventListener("keydown", handleKeyDown);
+      }
+    };
+  }, []);
+
+  const handleKeyDown = (event) => {
+    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      event.preventDefault();
+    }
   };
   return (
     <div className="register_container">
@@ -28,7 +50,11 @@ export const Register = ({ show, onHide, onBack }) => {
 
             <Form.Group className="mb-3" controlId="formBasicPhone">
               <Form.Label>Số điện thoại</Form.Label>
-              <Form.Control type="text" placeholder="090xxxxxxx" />
+              <Form.Control
+                type="number"
+                placeholder="090xxxxxxx"
+                ref={phoneInputRef} // Gán ref cho input
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">

@@ -9,6 +9,8 @@ import {
   CardInfVoucher,
 } from "../../Cards/Card";
 import { Timeout } from "../Timeout/Timeout";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
 
 export const Service = () => {
   const location = useLocation();
@@ -21,14 +23,17 @@ export const Service = () => {
   const [selectedVoucherId, setSelectedVoucherId] = useState(null);
   const [remainingTime, setRemainingTime] = useState(data.remainingTime); // Lấy thời gian từ data
   const navigate = useNavigate(); // Khởi tạo useNavigate
-
-  console.log(data);
+  const token = localStorage.getItem("token"); // Lấy token từ localStorage
 
   useEffect(() => {
     const fetchService = async () => {
       let url = `http://localhost:8080/service`;
       try {
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Gửi token trong header
+          },
+        });
         setService(response.data);
         const initialQuantities = {};
         response.data.forEach((service) => {
@@ -40,13 +45,17 @@ export const Service = () => {
       }
     };
     fetchService();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const fetchVoucher = async () => {
       let url = `http://localhost:8080/voucher`;
       try {
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Gửi token trong header
+          },
+        });
         setVouchers(response.data);
         const prices = {}; // Tạo đối tượng để lưu trữ giá voucher
         response.data.forEach((voucher) => {
@@ -58,7 +67,7 @@ export const Service = () => {
       }
     };
     fetchVoucher();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     // Tính toán totalServicePrice mỗi khi quantities thay đổi
@@ -93,7 +102,15 @@ export const Service = () => {
     : 0;
 
   const handleTimeout = () => {
-    alert("Thời gian đặt vé đã hết!");
+    toast.warn("Vui lòng chọn rạp để tiếp tục.", {
+      position: "top-right", // Vị trí của toast
+      autoClose: 3000, // Tự động đóng sau 3 giây
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
     // Xử lý khi hết thời gian, ví dụ: chuyển hướng về trang chủ
     navigate("/");
   };
@@ -179,6 +196,7 @@ export const Service = () => {
           Thanh toán
         </Button>
       </div>
+      <ToastContainer />
     </div>
   );
 };
