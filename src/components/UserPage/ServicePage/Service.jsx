@@ -9,8 +9,9 @@ import {
   CardInfVoucher,
 } from "../../Cards/Card";
 import { Timeout } from "../Timeout/Timeout";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
+import { Toast } from "../ToastPage";
 
 export const Service = () => {
   const location = useLocation();
@@ -27,6 +28,7 @@ export const Service = () => {
   const fullName = localStorage.getItem("fullName");
   const emailAccount = localStorage.getItem("emailAccount");
   const phoneNumber = localStorage.getItem("phoneNumber");
+  const [toastMessage, setToastMessage] = useState(null);
 
   useEffect(() => {
     const fetchService = async () => {
@@ -105,14 +107,9 @@ export const Service = () => {
     : 0;
 
   const handleTimeout = () => {
-    toast.warn("Vui lòng chọn rạp để tiếp tục.", {
-      position: "top-right", // Vị trí của toast
-      autoClose: 3000, // Tự động đóng sau 3 giây
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+    setToastMessage({
+      message: "Hết thời gian đặt vé.",
+      type: "warn",
     });
     // Xử lý khi hết thời gian, ví dụ: chuyển hướng về trang chủ
     navigate("/");
@@ -121,6 +118,8 @@ export const Service = () => {
   const handleTimeChange = (time) => {
     setRemainingTime(time);
   };
+
+  const TotalPrice = data.totalPriceSeat + totalServicePrice - discount;
 
   return (
     <div className="service_container">
@@ -157,11 +156,7 @@ export const Service = () => {
                 })}
               </p>
               <p style={{ color: "red" }}>
-                {(
-                  data.totalPriceSeat +
-                  totalServicePrice -
-                  discount
-                ).toLocaleString("vi-VN", {
+                {TotalPrice.toLocaleString("vi-VN", {
                   style: "currency",
                   currency: "VND",
                 })}
@@ -204,6 +199,7 @@ export const Service = () => {
         </Button>
       </div>
       <ToastContainer />
+      {toastMessage && <Toast message={toastMessage.message} />}
     </div>
   );
 };

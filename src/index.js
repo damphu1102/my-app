@@ -13,6 +13,8 @@ import { MovieInf } from "./components/UserPage/MoviePage/MovieInf/MovieInf";
 import { Movie } from "./components/UserPage/MoviePage/Movie";
 import { Seat } from "./components/UserPage/SeatPage/Seat";
 import { Service } from "./components/UserPage/ServicePage/Service";
+import { Event } from "./components/UserPage/EventPage/Event";
+import { Member } from "./components/UserPage/MemberPage/Member";
 
 const router = createBrowserRouter([
   {
@@ -40,10 +42,18 @@ const router = createBrowserRouter([
         path: "/service",
         element: <Service />,
       },
+      {
+        path: "/event",
+        element: <Event />,
+      },
+      {
+        path: "/about",
+        element: <Member />,
+      },
     ],
   },
   {
-    path: "admin",
+    path: "/admin",
     element: <Login />,
   },
   {
