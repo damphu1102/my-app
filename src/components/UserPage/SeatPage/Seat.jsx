@@ -7,6 +7,7 @@ import axios from "axios";
 import { Timeout } from "../Timeout/Timeout";
 import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
 import { Toast } from "../ToastPage";
+import { ToastContainer } from "react-toastify";
 
 export const Seat = () => {
   const location = useLocation();
@@ -42,14 +43,6 @@ export const Seat = () => {
     };
     fetchRowSeat();
   }, [token]);
-
-  useEffect(() => {
-    if (toastMessage) {
-      setTimeout(() => {
-        setToastMessage(null);
-      }, 3000);
-    }
-  }, [toastMessage]);
 
   // Lấy danh sách các hàng ghế duy nhất
   const uniqueRows = [...new Set(rowSeat.map((seat) => seat.seatRow))];
@@ -120,7 +113,10 @@ export const Seat = () => {
         message: "Vui lòng chọn ghế trước khi tiếp tục.",
         type: "warn",
       });
-      return; // Ngăn chặn việc chuyển hướng nếu không có ghế nào được chọn
+      setTimeout(() => {
+        setToastMessage(null); // Reset toastMessage sau khi hiển thị
+      }, 1000);
+      return;
     }
     const { selectedSeatsInfo, totalPriceSeat } = handleDataNext();
     navigate("/service", {
@@ -222,9 +218,8 @@ export const Seat = () => {
         >
           Next
         </Button>
-        {toastMessage && (
-          <Toast message={toastMessage.message} type={toastMessage.type} />
-        )}
+        <ToastContainer />
+        {toastMessage && <Toast message={toastMessage.message} />}
       </div>
     </div>
   );

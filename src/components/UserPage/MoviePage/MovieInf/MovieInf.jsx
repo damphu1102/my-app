@@ -5,11 +5,14 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { CardTabMovie } from "../../../Cards/Card";
 import { Cinema } from "../../CinemaModal/Cinema";
+import { ToastContainer } from "react-toastify";
+import { Toast } from "../../ToastPage";
 
 export const MovieInf = () => {
   const [movie, setMovie] = useState("");
   const { movieId } = useParams();
   const [show, setShow] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -28,6 +31,13 @@ export const MovieInf = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
+    if (!localStorage.getItem("token")) {
+      setToastMessage({ message: "Vui lòng đăng nhập để tiếp tục." });
+      setTimeout(() => {
+        setToastMessage(null);
+      }, 1000);
+      return;
+    }
     setShow(true);
   };
 
@@ -70,12 +80,18 @@ export const MovieInf = () => {
           <CardTabMovie />
         </div>
       </div>
-      <Cinema
-        show={show}
-        key={movieId}
-        handleClose={handleClose}
-        movie={movie}
-      />
+
+      {toastMessage && <Toast message={toastMessage.message} />}
+      {localStorage.getItem("token") ? (
+        <Cinema
+          show={show}
+          key={movieId}
+          handleClose={handleClose}
+          movie={movie}
+        />
+      ) : (
+        <ToastContainer />
+      )}
     </div>
   );
 };

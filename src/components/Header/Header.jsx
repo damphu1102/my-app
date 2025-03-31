@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { Register } from "../ModalLogin/Register";
 import axios from "axios";
 import { Dropdown } from "react-bootstrap";
-import { ToastContainer } from "react-toastify";
 import { Toast } from "../UserPage/ToastPage";
+import { ToastContainer } from "react-toastify";
 
 export const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -125,9 +125,7 @@ export const Header = () => {
         onBack={handleBackLogin}
       />
       <ToastContainer />
-      {toastMessage && (
-        <Toast message={toastMessage.message} type={toastMessage.type} />
-      )}
+      {toastMessage && <Toast message={toastMessage.message} />}
     </div>
   );
 };

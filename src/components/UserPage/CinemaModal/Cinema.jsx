@@ -5,6 +5,7 @@ import { CardModalShowTime } from "../../Cards/Card";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
 import { Toast } from "../ToastPage";
+import { ToastContainer } from "react-toastify";
 
 export const Cinema = ({ show, handleClose, movie }) => {
   const [cinemas, setCinemas] = useState([]);
@@ -26,7 +27,7 @@ export const Cinema = ({ show, handleClose, movie }) => {
 
   useEffect(() => {
     const fetchCinemas = async () => {
-      if (selectedLocation) {
+      if (selectedLocation && token) {
         try {
           const response = await axios.get(
             `http://localhost:8080/cinema/filter?locationEnum=${selectedLocation}`,
@@ -45,40 +46,34 @@ export const Cinema = ({ show, handleClose, movie }) => {
       }
     };
     fetchCinemas();
-  }, [selectedLocation]);
+  }, [selectedLocation, token]);
 
   useEffect(() => {
     const fetchShowTime = async () => {
-      try {
-        let url = `http://localhost:8080/showtime`; // URL mặc định để lấy tất cả showtimes
+      if (token) {
+        try {
+          let url = `http://localhost:8080/showtime`; // URL mặc định để lấy tất cả showtimes
 
-        if (date) {
-          // Nếu date có giá trị, thêm tham số truy vấn để lọc theo ngày
-          url = `http://localhost:8080/showtime/filter?date=${date}`;
+          if (date) {
+            // Nếu date có giá trị, thêm tham số truy vấn để lọc theo ngày
+            url = `http://localhost:8080/showtime/filter?date=${date}`;
+          }
+
+          const response = await axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${token}`, // Gửi token trong header
+            },
+          });
+          setShowTimes(response.data);
+        } catch (error) {
+          console.error("Error fetching showtimes:", error);
+          setShowTimes([]); // Reset showTimes nếu có lỗi
         }
-
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Gửi token trong header
-          },
-        });
-        setShowTimes(response.data);
-      } catch (error) {
-        console.error("Error fetching showtimes:", error);
-        setShowTimes([]); // Reset showTimes nếu có lỗi
       }
     };
 
     fetchShowTime();
-  }, [date]);
-
-  useEffect(() => {
-    if (toastMessage) {
-      setTimeout(() => {
-        setToastMessage(null);
-      }, 3000);
-    }
-  }, [toastMessage]);
+  }, [date, token]);
 
   const handleDateChange = (event) => {
     setDate(event.target.value);
@@ -113,6 +108,10 @@ export const Cinema = ({ show, handleClose, movie }) => {
       setToastMessage({
         message: "Vui lòng chọn rạp để tiếp tục.",
       });
+      setTimeout(() => {
+        setToastMessage(null); // Reset toastMessage sau khi hiển thị
+      }, 1000);
+      return;
     }
   };
 
@@ -131,6 +130,10 @@ export const Cinema = ({ show, handleClose, movie }) => {
       setToastMessage({
         message: "Vui lòng chọn giờ chiếu để tiếp tục.",
       });
+      setTimeout(() => {
+        setToastMessage(null); // Reset toastMessage sau khi hiển thị
+      }, 1000);
+      return;
     }
   };
 
@@ -159,9 +162,8 @@ export const Cinema = ({ show, handleClose, movie }) => {
         handleTimeClick={handleTimeClick}
         handleNextSeatPage={handleNextSeatPage}
       />
-      {toastMessage && (
-        <Toast message={toastMessage.message} type={toastMessage.type} />
-      )}
+      <ToastContainer />
+      {toastMessage && <Toast message={toastMessage.message} />}
     </div>
   );
 };

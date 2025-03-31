@@ -43,7 +43,7 @@ export const Login = ({
                 type="text"
                 placeholder="Nhập username"
                 name="userName" // Đảm bảo trùng khớp với tên trong state
-                value={login.userName}
+                value={login?.userName || ""}
                 onChange={handleChange}
                 required
               />
@@ -55,7 +55,7 @@ export const Login = ({
                 type={passwordVisible ? "text" : "password"}
                 placeholder="Nhập mật khẩu"
                 name="passWord"
-                value={login.passWord}
+                value={login?.passWord || ""}
                 onChange={handleChange}
                 required
               />
