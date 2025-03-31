@@ -24,6 +24,9 @@ export const Service = () => {
   const [remainingTime, setRemainingTime] = useState(data.remainingTime); // Lấy thời gian từ data
   const navigate = useNavigate(); // Khởi tạo useNavigate
   const token = localStorage.getItem("token"); // Lấy token từ localStorage
+  const fullName = localStorage.getItem("fullName");
+  const emailAccount = localStorage.getItem("emailAccount");
+  const phoneNumber = localStorage.getItem("phoneNumber");
 
   useEffect(() => {
     const fetchService = async () => {
@@ -122,7 +125,11 @@ export const Service = () => {
   return (
     <div className="service_container">
       <div className="service">
-        <CardInfAccount />
+        <CardInfAccount
+          fullName={fullName}
+          emailAccount={emailAccount}
+          phoneNumber={phoneNumber}
+        />
         {/*  */}
         <CardInfService
           services={services}

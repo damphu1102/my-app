@@ -303,7 +303,7 @@ export const CardModalShowTime = ({
   );
 };
 
-export const CardInfAccount = () => {
+export const CardInfAccount = ({ fullName, emailAccount, phoneNumber }) => {
   return (
     <>
       <div className="inf_account">
@@ -316,9 +316,9 @@ export const CardInfAccount = () => {
           <label>Email</label>
         </div>
         <div className="input">
-          <input type="text" readOnly disabled></input>
-          <input type="number" readOnly disabled></input>
-          <input type="text" readOnly disabled></input>
+          <input readOnly disabled value={fullName}></input>
+          <input readOnly disabled value={phoneNumber}></input>
+          <input readOnly disabled value={emailAccount}></input>
         </div>
       </div>
     </>

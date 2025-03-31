@@ -16,6 +16,7 @@ export const Header = () => {
     userName: "",
     passWord: "",
   });
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUserName, setLoggedInUserName] = useState("");
   const [toastMessage, setToastMessage] = useState(null);
@@ -49,7 +50,11 @@ export const Header = () => {
         "http://localhost:8080/auth/login",
         login
       );
-      localStorage.setItem("token", response.data.token);
+      const { fullName, emailAccount, phoneNumber, token } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("fullName", fullName);
+      localStorage.setItem("emailAccount", emailAccount);
+      localStorage.setItem("phoneNumber", phoneNumber);
       localStorage.setItem("isLoggedIn", "true"); // Lưu trạng thái đăng nhập
       localStorage.setItem("loggedInUserName", login.userName); // Lưu userName
       // Cập nhật trạng thái đăng nhập và userName
@@ -67,6 +72,9 @@ export const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("fullName");
+    localStorage.removeItem("emailAccount");
+    localStorage.removeItem("phoneNumber");
     localStorage.removeItem("isLoggedIn"); // Xóa trạng thái đăng nhập
     localStorage.removeItem("loggedInUserName"); // Xóa userName
     setIsLoggedIn(false);
