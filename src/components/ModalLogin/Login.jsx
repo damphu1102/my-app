@@ -46,6 +46,7 @@ export const Login = ({
                 value={login?.userName || ""}
                 onChange={handleChange}
                 required
+                autocomplete="current-Username" // Thêm autocomplete
               />
             </Form.Group>
 
@@ -58,6 +59,7 @@ export const Login = ({
                 value={login?.passWord || ""}
                 onChange={handleChange}
                 required
+                autocomplete="current-password" // Thêm autocomplete
               />
               <div className="eyes" onClick={togglePasswordVisibility}>
                 {passwordVisible ? <FaEye /> : <FaEyeSlash />}

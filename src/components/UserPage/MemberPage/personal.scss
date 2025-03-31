@@ -1,0 +1,39 @@
+.personal_container {
+  margin: 0 20%;
+  background-color: #eee;
+  border-radius: 10px;
+  h4 {
+    text-align: center;
+    padding-top: 40px;
+    font-weight: bold;
+  }
+  .inf_acc {
+    margin: 40px 50px;
+    .mb-3 {
+      width: 80%;
+      margin-left: 50px;
+      margin-top: 20px;
+    }
+    .mb-4 {
+      margin: 10px 45px;
+    }
+    .form-select {
+      margin: auto;
+    }
+  }
+  .change_pass {
+    margin-left: 80%;
+    p {
+      color: blue;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  }
+  .btn_update {
+    margin: 0px 30%;
+    padding-bottom: 20px;
+    button {
+      width: 100%;
+    }
+  }
+}

@@ -1,105 +1,102 @@
-import { Button, Form, Modal } from "react-bootstrap";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import "../ModalLogin/register.scss";
+import { ModalRegister } from "./ModalRegister";
+import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import { Toast } from "../UserPage/ToastPage";
 
 export const Register = ({ show, onHide, onBack }) => {
-  const [passwordVisible, setPasswordVisible] = useState(false); // State để theo dõi trạng thái hiển thị mật khẩu
-  const phoneInputRef = useRef(null); // Tạo một ref cho input phone
+  // State để lưu trữ giá trị các input
+  const [userName, setUserName] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [emailAccount, setEmailAccount] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [passWord, setPassWord] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
+  // State để theo dõi trạng thái validation
+  const [validated, setValidated] = useState(false);
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
-  // Xử lý sự kiện sử dụng mũi tên của input number
-  useEffect(() => {
-    const inputElement = phoneInputRef.current; // Sao chép giá trị vào biến cục bộ
-
-    if (inputElement) {
-      inputElement.addEventListener("keydown", handleKeyDown);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Kiểm tra giá trị trống trước khi gọi API
+    if (
+      !userName ||
+      !fullName ||
+      !emailAccount ||
+      !phoneNumber ||
+      !passWord ||
+      !confirmPassword
+    ) {
+      setValidated(true);
+      return; // Trả về ngay lập tức nếu có trường trống
     }
 
-    return () => {
-      if (inputElement) {
-        inputElement.removeEventListener("keydown", handleKeyDown);
-      }
+    const accountData = {
+      userName: userName,
+      fullName: fullName,
+      emailAccount: emailAccount,
+      phoneNumber: phoneNumber,
+      passWord: passWord,
     };
-  }, []);
 
-  const handleKeyDown = (event) => {
-    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
-      event.preventDefault();
-    }
+    // Kiểm tra form.checkValidity() trước khi call API
+    axios
+      .post("http://localhost:8080/account/create", accountData)
+      .then((response) => {
+        console.log("Account created:", response.data);
+        // Xử lý phản hồi thành công (ví dụ: hiển thị thông báo)
+        setToastMessage({
+          message: "Đăng ký thành công",
+          type: "warn",
+        });
+        onHide(); // Đóng modal sau khi đăng ký thành công
+        // Reset form chỉ khi đăng ký thành công
+        setUserName("");
+        setFullName("");
+        setEmailAccount("");
+        setPhoneNumber("");
+        setPassWord("");
+        setConfirmPassword("");
+        setTermsAccepted(false);
+        setValidated(false); // Reset validated
+      })
+      .catch((error) => {
+        console.error("Error creating account:", error);
+        setToastMessage({
+          message: "Đăng ký thất bại",
+          type: "warn",
+        });
+        setValidated(true); // Cập nhật validated để hiển thị lỗi nếu có lỗi
+      });
   };
+
   return (
     <div className="register_container">
-      <Modal show={show} centered onHide={onHide}>
-        <Modal.Header closeButton>
-          <Modal.Title style={{ cursor: "default" }}>Đăng ký</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicName">
-              <Form.Label>Họ và tên</Form.Label>
-              <Form.Control type="text" placeholder="Nguyễn Văn A" />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="abc@gmail.com" />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicPhone">
-              <Form.Label>Số điện thoại</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="090xxxxxxx"
-                ref={phoneInputRef} // Gán ref cho input
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Mật khẩu</Form.Label>
-              <Form.Control
-                type={passwordVisible ? "text" : "password"}
-                placeholder="Mật khẩu"
-              />
-              <div className="eyes" onClick={togglePasswordVisibility}>
-                {passwordVisible ? <FaEye /> : <FaEyeSlash />}
-              </div>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Nhập lại mật khẩu</Form.Label>
-              <Form.Control
-                type={passwordVisible ? "text" : "password"}
-                placeholder="Nhập lại mật khẩu"
-              />
-              <div className="eyes" onClick={togglePasswordVisibility}>
-                {passwordVisible ? <FaEye /> : <FaEyeSlash />}
-              </div>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Form.Check
-                type="checkbox"
-                label="Đồng ý với điều khoản dịch vụ"
-              />
-            </Form.Group>
-
-            <div className="btn_login">
-              <Button variant="primary">Đăng ký</Button>
-            </div>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <p style={{ cursor: "default" }}>
-            Bạn đã có tài khoản đăng nhập?
-            <span onClick={onBack} style={{ color: "blue", cursor: "pointer" }}>
-              Đăng nhập
-            </span>
-          </p>
-        </Modal.Footer>
-      </Modal>
+      <ModalRegister
+        show={show}
+        onHide={onHide}
+        onBack={onBack}
+        userName={userName}
+        fullName={fullName}
+        emailAccount={emailAccount}
+        phoneNumber={phoneNumber}
+        passWord={passWord}
+        confirmPassword={confirmPassword}
+        termsAccepted={termsAccepted}
+        handleSubmit={handleSubmit}
+        setUserName={setUserName}
+        setFullName={setFullName}
+        setEmailAccount={setEmailAccount}
+        setPhoneNumber={setPhoneNumber}
+        setPassWord={setPassWord}
+        setConfirmPassword={setConfirmPassword}
+        setTermsAccepted={setTermsAccepted}
+        validated={validated}
+      />
+      <ToastContainer />
+      {toastMessage && <Toast message={toastMessage.message} />}
     </div>
   );
 };

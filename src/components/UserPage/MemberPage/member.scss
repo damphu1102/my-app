@@ -1,4 +1,16 @@
 .member_container {
   margin-top: 130px;
   min-height: 100vh;
+
+  .navbar {
+    display: flex;
+    justify-content: center;
+    .nav-item {
+      margin: 0px 20px;
+      a {
+        color: black;
+        font-weight: bold;
+      }
+    }
+  }
 }
