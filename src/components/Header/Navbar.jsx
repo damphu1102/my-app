@@ -6,8 +6,16 @@ import Button from "react-bootstrap/Button";
 import "../Header/navbar.scss";
 import { useLocation } from "react-router-dom";
 
-export const Menu = () => {
+export const Menu = ({ setToastMessage }) => {
   const location = useLocation();
+
+  const handleAboutClick = (e) => {
+    if (!localStorage.getItem("token")) {
+      e.preventDefault();
+      setToastMessage({ message: "Vui lòng đăng nhập để tiếp tục." });
+    }
+  };
+
   return (
     <>
       <Navbar bg="light" data-bs-theme="light">
@@ -25,7 +33,11 @@ export const Menu = () => {
             <Nav.Link href="/event" active={location.pathname === "/event"}>
               Sự kiện
             </Nav.Link>
-            <Nav.Link href="/about" active={location.pathname === "/about"}>
+            <Nav.Link
+              href="/about"
+              active={location.pathname === "/about"}
+              onClick={handleAboutClick}
+            >
               Thành viên
             </Nav.Link>
           </Nav>

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../Header/header.scss";
 import { Menu } from "./Navbar";
 import { Login } from "../ModalLogin/Login";
@@ -20,6 +20,8 @@ export const Header = () => {
   const [loggedInUserName, setLoggedInUserName] = useState("");
   const [toastMessage, setToastMessage] = useState(null);
   const [validated, setValidated] = useState(false); // Thêm state validated
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const storedIsLoggedIn = localStorage.getItem("isLoggedIn");
@@ -59,8 +61,10 @@ export const Header = () => {
         login
       );
       if (response.data !== null) {
-        const { fullName, emailAccount, phoneNumber, token } = response.data;
+        const { fullName, emailAccount, phoneNumber, token, accountId } =
+          response.data;
         localStorage.setItem("token", token);
+        localStorage.setItem("accountId", accountId);
         localStorage.setItem("fullName", fullName);
         localStorage.setItem("emailAccount", emailAccount);
         localStorage.setItem("phoneNumber", phoneNumber);
@@ -114,15 +118,25 @@ export const Header = () => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = (e) => {
+    if (location.pathname !== "/") {
+      const timer = setTimeout(() => {
+        setToastMessage(null); // Reset toastMessage sau 1 giây
+      }, 1000);
+      navigate("/");
+      return () => clearTimeout(timer); // Clear timer nếu component unmount
+    }
+    e.preventDefault();
     localStorage.removeItem("token");
+    localStorage.removeItem("accountId");
     localStorage.removeItem("fullName");
     localStorage.removeItem("emailAccount");
     localStorage.removeItem("phoneNumber");
     localStorage.removeItem("isLoggedIn"); // Xóa trạng thái đăng nhập
     localStorage.removeItem("loggedInUserName"); // Xóa userName
-    setIsLoggedIn(false);
     setLoggedInUserName("");
+    setIsLoggedIn(false);
+
     setToastMessage({ message: "Đăng xuất thành công." });
   };
 
@@ -139,7 +153,7 @@ export const Header = () => {
           </Link>
         </div>
         <div className="navbar">
-          <Menu />
+          <Menu setToastMessage={setToastMessage} />
         </div>
         <div className="login">
           {isLoggedIn ? (
@@ -181,7 +195,7 @@ export const Header = () => {
         setValidated={setValidated}
       />
       <ToastContainer />
-      {toastMessage && <Toast message={toastMessage.message} />}
+      {toastMessage && <Toast message={toastMessage?.message} />}
     </div>
   );
 };
