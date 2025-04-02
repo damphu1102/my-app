@@ -7,11 +7,12 @@ export const Login = ({
   show,
   onHide,
   onRegister,
-  handleLogin,
   setLogin,
   login,
+  validated,
+  handleSubmit,
 }) => {
-  const [rememberMe, setRememberMe] = useState(false);
+  // const [rememberMe, setRememberMe] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false); // State để theo dõi trạng thái hiển thị mật khẩu
 
   const togglePasswordVisibility = () => {
@@ -25,9 +26,9 @@ export const Login = ({
     });
   };
 
-  const handleRememberMeChange = (e) => {
-    setRememberMe(e.target.checked);
-  };
+  // const handleRememberMeChange = (e) => {
+  //   setRememberMe(e.target.checked);
+  // };
 
   return (
     <div className="login_container">
@@ -47,7 +48,12 @@ export const Login = ({
                 onChange={handleChange}
                 required
                 autocomplete="current-Username" // Thêm autocomplete
+                isInvalid={validated && !login.userName}
               />
+
+              <Form.Control.Feedback type="invalid">
+                Vui lòng nhập tên đăng nhập
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -60,21 +66,26 @@ export const Login = ({
                 onChange={handleChange}
                 required
                 autocomplete="current-password" // Thêm autocomplete
+                isInvalid={validated && !login.passWord}
               />
-              <div className="eyes" onClick={togglePasswordVisibility}>
+              <Form.Control.Feedback type="invalid">
+                Vui lòng nhập mật khẩu
+              </Form.Control.Feedback>
+
+              <div className="eyes_login" onClick={togglePasswordVisibility}>
                 {passwordVisible ? <FaEye /> : <FaEyeSlash />}
               </div>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
+            {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check
                 type="checkbox"
                 label="Nhớ mật khẩu"
                 checked={rememberMe}
                 onChange={handleRememberMeChange}
               />
-            </Form.Group>
+            </Form.Group> */}
             <div className="btn_login">
-              <Button variant="primary" onClick={handleLogin}>
+              <Button variant="primary" onClick={handleSubmit}>
                 Đăng nhập
               </Button>
             </div>

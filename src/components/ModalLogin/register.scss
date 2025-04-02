@@ -3,3 +3,19 @@ input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.col-md {
+  position: relative; // Đặt position relative cho form group
+  .eyes {
+    position: absolute; // Định vị tuyệt đối
+    top: 50px; // Căn giữa theo chiều dọc
+    right: 35px; // Đặt bên phải 10px
+    transform: translateY(-50%); // Điều chỉnh vị trí theo chiều dọc
+    cursor: pointer; // Hiển thị con trỏ tay khi di chuột qua
+    z-index: 9999; // Đảm bảo icon nằm trên input
+  }
+
+  .form-control {
+    padding-right: 30px; // Tạo khoảng trống cho icon
+  }
+}

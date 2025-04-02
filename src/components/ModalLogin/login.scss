@@ -53,13 +53,13 @@
 }
 .mb-3 {
   position: relative; // Đặt position relative cho form group
-  .eyes {
+  .eyes_login {
     position: absolute; // Định vị tuyệt đối
-    top: 70%; // Căn giữa theo chiều dọc
-    right: 35px; // Đặt bên phải 10px
+    top: 50px; // Căn giữa theo chiều dọc
+    right: 30px; // Đặt bên phải 10px
     transform: translateY(-50%); // Điều chỉnh vị trí theo chiều dọc
     cursor: pointer; // Hiển thị con trỏ tay khi di chuột qua
-    z-index: 1; // Đảm bảo icon nằm trên input
+    z-index: 9999; // Đảm bảo icon nằm trên input
   }
 
   .form-control {

@@ -16,10 +16,10 @@ export const Header = () => {
     userName: "",
     passWord: "",
   });
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUserName, setLoggedInUserName] = useState("");
   const [toastMessage, setToastMessage] = useState(null);
+  const [validated, setValidated] = useState(false); // Thêm state validated
 
   useEffect(() => {
     const storedIsLoggedIn = localStorage.getItem("isLoggedIn");
@@ -31,17 +31,25 @@ export const Header = () => {
     }
   }, []);
 
-  const handleCloseLogin = () => setShowLogin(false);
+  const handleCloseLogin = () => {
+    setShowLogin(false);
+    setLogin({ userName: "", passWord: "" });
+    setValidated(false);
+  };
   const handleShowLogin = () => setShowLogin(true);
   const handleShowRegister = () => {
     handleCloseLogin();
     setShowRegister(true);
   };
 
-  const handleCloseRegister = () => setShowRegister(false);
+  const handleCloseRegister = () => {
+    setShowRegister(false);
+    setValidated(false);
+  };
   const handleBackLogin = () => {
     handleCloseRegister();
     handleShowLogin();
+    setValidated(false);
   };
 
   const handleLogin = async () => {
@@ -50,23 +58,59 @@ export const Header = () => {
         "http://localhost:8080/auth/login",
         login
       );
-      const { fullName, emailAccount, phoneNumber, token } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("fullName", fullName);
-      localStorage.setItem("emailAccount", emailAccount);
-      localStorage.setItem("phoneNumber", phoneNumber);
-      localStorage.setItem("isLoggedIn", "true"); // Lưu trạng thái đăng nhập
-      localStorage.setItem("loggedInUserName", login.userName); // Lưu userName
-      // Cập nhật trạng thái đăng nhập và userName
-      setIsLoggedIn(true);
-      setLoggedInUserName(login.userName); // Lưu userName
-      // Đóng modal đăng nhập
-      handleCloseLogin();
-      setToastMessage({ message: "Đăng nhập thành công." });
+      if (response.data !== null) {
+        const { fullName, emailAccount, phoneNumber, token } = response.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("fullName", fullName);
+        localStorage.setItem("emailAccount", emailAccount);
+        localStorage.setItem("phoneNumber", phoneNumber);
+        localStorage.setItem("isLoggedIn", "true"); // Lưu trạng thái đăng nhập
+        localStorage.setItem("loggedInUserName", login.userName); // Lưu userName
+        // Cập nhật trạng thái đăng nhập và userName
+        setIsLoggedIn(true);
+        setLoggedInUserName(login.userName); // Lưu userName
+        setValidated(false); // Reset validated
+        // Đóng modal đăng nhập
+        handleCloseLogin();
+        setToastMessage({ message: "Đăng nhập thành công." });
+      } else {
+        console.log("Username, Password không đúng");
+      }
     } catch (error) {
       // Xử lý lỗi đăng nhập
       console.error("Login failed:", error);
       // Hiển thị thông báo lỗi cho người dùng
+    }
+  };
+
+  const checkLogin = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/account/authenticate",
+        login
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Lỗi", error);
+      return false;
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+
+    if (login.userName === "" || login.passWord === "") {
+      setValidated(true); // Đặt validated thành true nếu form không hợp lệ
+    } else {
+      const result = await checkLogin();
+      console.log(result);
+
+      if (result === true) {
+        handleLogin(); // Gọi handleLogin nếu checkLogin trả về true
+      } else {
+        setToastMessage({ message: "User hoặc Password sai." });
+        return;
+      }
     }
   };
 
@@ -126,11 +170,15 @@ export const Header = () => {
         handleLogin={handleLogin}
         login={login}
         setLogin={setLogin}
+        validated={validated}
+        handleSubmit={handleSubmit}
       />
       <Register
         show={showRegister}
         onHide={handleCloseRegister}
         onBack={handleBackLogin}
+        validated={validated}
+        setValidated={setValidated}
       />
       <ToastContainer />
       {toastMessage && <Toast message={toastMessage.message} />}

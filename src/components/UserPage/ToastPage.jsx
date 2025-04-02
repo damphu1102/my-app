@@ -7,7 +7,7 @@ export const Toast = ({ message }) => {
   useEffect(() => {
     const showToast = () => {
       toast(message, {
-        position: "top-center",
+        position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,

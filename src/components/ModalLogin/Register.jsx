@@ -5,7 +5,7 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { Toast } from "../UserPage/ToastPage";
 
-export const Register = ({ show, onHide, onBack }) => {
+export const Register = ({ show, onHide, onBack, validated, setValidated }) => {
   // State để lưu trữ giá trị các input
   const [userName, setUserName] = useState("");
   const [fullName, setFullName] = useState("");
@@ -15,8 +15,6 @@ export const Register = ({ show, onHide, onBack }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
-  // State để theo dõi trạng thái validation
-  const [validated, setValidated] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
