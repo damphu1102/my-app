@@ -47,7 +47,6 @@ export const Register = ({ show, onHide, onBack, validated, setValidated }) => {
         // Xử lý phản hồi thành công (ví dụ: hiển thị thông báo)
         setToastMessage({
           message: "Đăng ký thành công",
-          type: "warn",
         });
         onHide(); // Đóng modal sau khi đăng ký thành công
         // Reset form chỉ khi đăng ký thành công
@@ -64,7 +63,6 @@ export const Register = ({ show, onHide, onBack, validated, setValidated }) => {
         console.error("Error creating account:", error);
         setToastMessage({
           message: "Đăng ký thất bại",
-          type: "warn",
         });
         setValidated(true); // Cập nhật validated để hiển thị lỗi nếu có lỗi
       });

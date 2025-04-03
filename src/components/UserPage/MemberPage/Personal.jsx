@@ -1,32 +1,27 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
 import "../MemberPage/personal.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Toast } from "../ToastPage";
 import { ToastContainer } from "react-toastify";
+import { ChangePass } from "../../ModalLogin/ChangePass";
 
 export const Personal = () => {
+  const userDataString = localStorage.getItem("userData"); // Lấy chuỗi JSON userData từ localStorage
+  const userData = JSON.parse(userDataString); // Phân tích chuỗi JSON thành đối tượng JavaScript
   const userName = localStorage.getItem("loggedInUserName");
-  const fullName = localStorage.getItem("fullName");
-  const accountId = localStorage.getItem("accountId");
   const token = localStorage.getItem("token"); // Lấy token từ localStorage
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [gender, setGender] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [city, setCity] = useState("");
-  const [district, setDistrict] = useState("");
-  const [address, setAddress] = useState("");
+  const accountId = userData.accountId;
   const [toastMessage, setToastMessage] = useState(null);
+  const [updatedUserData, setUpdatedUserData] = useState({ ...userData }); // State để lưu trữ dữ liệu đã cập nhật
 
-  useEffect(() => {
-    // Lấy dữ liệu từ localStorage khi component được mount
-    setEmail(localStorage.getItem("emailAccount") || "");
-    setPhoneNumber(localStorage.getItem("phoneNumber") || "");
-  }, []);
+  const [showPass, setShowPass] = useState(false);
 
-  const handleChange = (e, setter) => {
-    setter(e.target.value);
+  const handleClose = () => setShowPass(false);
+  const handleShow = () => setShowPass(true);
+
+  const handleChange = (e, field) => {
+    setUpdatedUserData({ ...updatedUserData, [field]: e.target.value });
   };
 
   const handleUpdate = async () => {
@@ -34,13 +29,13 @@ export const Personal = () => {
       const response = await axios.put(
         `http://localhost:8080/account/${accountId}`,
         {
-          emailAccount: email,
-          phoneNumber: phoneNumber,
-          roleGender: gender,
-          dateBird: birthDate,
-          city: city,
-          district: district,
-          address: address,
+          emailAccount: updatedUserData.emailAccount,
+          phoneNumber: updatedUserData.phoneNumber,
+          roleGender: updatedUserData.roleGender,
+          dateBird: updatedUserData.dateBird,
+          city: updatedUserData.city,
+          district: updatedUserData.district,
+          address: updatedUserData.address,
         },
         {
           headers: {
@@ -50,6 +45,7 @@ export const Personal = () => {
       );
 
       if (response.status === 200) {
+        localStorage.setItem("userData", JSON.stringify(updatedUserData)); // Cập nhật userData trong localStorage
         setToastMessage({
           message: "Cập nhật thành công.",
         });
@@ -86,13 +82,18 @@ export const Personal = () => {
           <Col md>
             <Form.Group className="mb-3" controlId="formBasicDirector">
               <Form.Label>Họ Tên</Form.Label>
-              <Form.Control type="input" value={fullName} disabled />
+              <Form.Control
+                type="input"
+                value={userData.fullName}
+                disabled
+                readOnly
+              />
             </Form.Group>
           </Col>
           <Col md>
             <Form.Group className="mb-3" controlId="formBasicActor">
               <Form.Label>Username</Form.Label>
-              <Form.Control type="input" disabled value={userName} />
+              <Form.Control type="input" disabled value={userName} readOnly />
             </Form.Group>
           </Col>
         </Row>
@@ -103,8 +104,8 @@ export const Personal = () => {
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="input"
-                value={email}
-                onChange={(e) => handleChange(e, setEmail)}
+                value={updatedUserData.emailAccount}
+                onChange={(e) => handleChange(e, "emailAccount")}
               />
             </Form.Group>
           </Col>
@@ -113,8 +114,8 @@ export const Personal = () => {
               <Form.Label>Số điện thoại</Form.Label>
               <Form.Control
                 type="input"
-                value={phoneNumber}
-                onChange={(e) => handleChange(e, setPhoneNumber)}
+                value={updatedUserData.phoneNumber}
+                onChange={(e) => handleChange(e, "phoneNumber")}
               />
             </Form.Group>
           </Col>
@@ -126,12 +127,11 @@ export const Personal = () => {
               <Form.Label>Giới tính</Form.Label>
               <Form.Select
                 aria-label="Floating label select example"
-                onChange={(e) => handleChange(e, setGender)}
-                value={gender}
+                value={updatedUserData.roleGender}
+                onChange={(e) => handleChange(e, "roleGender")}
               >
-                <option value="">---</option>
-                <option value="Nam">Nam</option>
-                <option value="Nu">Nu</option>
+                <option value={userData.roleGender.Nam}>Nam</option>
+                <option value={userData.roleGender.Nu}>Nu</option>
               </Form.Select>
             </Form.Group>
           </Col>
@@ -141,8 +141,8 @@ export const Personal = () => {
               <Form.Label>Ngày sinh</Form.Label>
               <Form.Control
                 type="date"
-                onChange={(e) => handleChange(e, setBirthDate)}
-                value={birthDate}
+                value={updatedUserData.dateBird}
+                onChange={(e) => handleChange(e, "dateBird")}
               />
             </Form.Group>
           </Col>
@@ -155,8 +155,8 @@ export const Personal = () => {
               <Form.Control
                 type="input"
                 placeholder="Vui lòng nhập tỉnh/thành phố"
-                onChange={(e) => handleChange(e, setCity)}
-                value={city}
+                value={updatedUserData.city}
+                onChange={(e) => handleChange(e, "city")}
               />
             </Form.Group>
           </Col>
@@ -166,8 +166,8 @@ export const Personal = () => {
               <Form.Control
                 type="input"
                 placeholder="Vui lòng nhập quận/huyện"
-                onChange={(e) => handleChange(e, setDistrict)}
-                value={district}
+                value={updatedUserData.district}
+                onChange={(e) => handleChange(e, "district")}
               />
             </Form.Group>
           </Col>
@@ -179,13 +179,13 @@ export const Personal = () => {
             <Form.Control
               type="input"
               placeholder="Vui lòng nhập địa chỉ"
-              onChange={(e) => handleChange(e, setAddress)}
-              value={address}
+              value={updatedUserData.address}
+              onChange={(e) => handleChange(e, "address")}
             />
           </Form.Group>
         </Col>
       </div>
-      <div className="change_pass">
+      <div className="change_pass" onClick={handleShow}>
         <p>Đổi mật khẩu</p>
       </div>
       <div className="btn_update">
@@ -193,6 +193,7 @@ export const Personal = () => {
           Cập nhật
         </Button>
       </div>
+      <ChangePass show={showPass} onHide={handleClose} />
       <ToastContainer />
       {toastMessage && <Toast message={toastMessage.message} />}
     </div>
