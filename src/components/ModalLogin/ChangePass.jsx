@@ -16,6 +16,7 @@ export const ChangePass = ({ show, onHide }) => {
   const token = localStorage.getItem("token"); // Lấy token từ localStorage
   const accountId = userData.accountId;
   const [validated, setValidated] = useState(false); // Thêm state validated
+  const [oldPasswordError, setOldPasswordError] = useState("");
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -32,31 +33,55 @@ export const ChangePass = ({ show, onHide }) => {
   const handleChangePassword = async () => {
     setValidated(true);
 
-    if (validated && confirmNewPassword === newPassword) {
-      try {
-        const response = await axios.put(
-          `http://localhost:8080/account/updatePassword`,
-          {
-            accountId: accountId,
-            newPassWord: newPassword,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Gửi token trong header
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          alert("Cập nhật mật khẩu thành công.");
-          onHide(); // Đóng modal sau khi thành công
-        } else {
-          alert("Cập nhật mật khẩu thất bại.");
+    try {
+      const checkPassResponse = await axios.post(
+        `http://localhost:8080/account/check_pass`,
+        {
+          accountId: accountId,
+          passWord: oldPassword,
         }
-      } catch (error) {
-        alert("Đã xảy ra lỗi khi cập nhật mật khẩu.");
-        console.error("Lỗi cập nhật mật khẩu:", error);
+      );
+
+      if (checkPassResponse.data === true) {
+        // Old password is valid, proceed with new password update
+        if (confirmNewPassword === newPassword && newPassword) {
+          try {
+            const updatePasswordResponse = await axios.put(
+              `http://localhost:8080/account/updatePassword`,
+              {
+                accountId: accountId,
+                newPassWord: newPassword,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            if (updatePasswordResponse.status === 200) {
+              alert("Cập nhật mật khẩu thành công.");
+              onHide();
+            } else {
+              alert("Cập nhật mật khẩu thất bại.");
+            }
+          } catch (updateError) {
+            alert("Đã xảy ra lỗi khi cập nhật mật khẩu.");
+            console.error("Lỗi cập nhật mật khẩu:", updateError);
+          }
+        } else {
+          // New passwords do not match
+          setValidated(true); // Keep validated true to show new password mismatch error
+        }
+      } else {
+        // Old password is invalid
+        setOldPasswordError("Mật khẩu cũ không đúng.");
+        setValidated(true); // Set validated to true to show old password error
       }
+    } catch (checkPassError) {
+      alert("Lỗi xác thực mật khẩu cũ.");
+      console.error("Lỗi xác thực mật khẩu cũ:", checkPassError);
+      setValidated(false); // Set validated to false in case of error
     }
   };
 
@@ -66,6 +91,8 @@ export const ChangePass = ({ show, onHide }) => {
       setValidated(false);
       setNewPassword("");
       setConfirmNewPassword("");
+      setOldPassword("");
+      setOldPasswordError("");
     }
   }, [show]);
 
@@ -82,11 +109,16 @@ export const ChangePass = ({ show, onHide }) => {
               <Form.Control
                 type={passwordVisible ? "text" : "password"}
                 placeholder="Mật khẩu"
-                autocomplete="current-password"
+                autocomplete="current-oldpassword"
                 required
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
               />
+              {oldPasswordError && (
+                <Form.Text className="text-danger">
+                  {oldPasswordError}
+                </Form.Text>
+              )}
             </Form.Group>
             <div className="eyes" onClick={togglePasswordVisibility}>
               {passwordVisible ? <FaEye /> : <FaEyeSlash />}
@@ -99,7 +131,7 @@ export const ChangePass = ({ show, onHide }) => {
               <Form.Control
                 type={passwordNewVisible ? "text" : "password"}
                 placeholder="Mật khẩu mới"
-                autocomplete="current-password" // Thêm autocomplete
+                autocomplete="current-newpassword" // Thêm autocomplete
                 required
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -126,7 +158,7 @@ export const ChangePass = ({ show, onHide }) => {
               <Form.Control
                 type={confirmPasswordVisible ? "text" : "password"}
                 placeholder="Xác nhận mật khẩu mới"
-                autocomplete="current-password" // Thêm autocomplete
+                autocomplete="current-confrimpassword" // Thêm autocomplete
                 required
                 value={confirmNewPassword}
                 onChange={(e) => setConfirmNewPassword(e.target.value)}

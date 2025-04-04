@@ -144,7 +144,6 @@ export const Header = () => {
       setValidated(true); // Đặt validated thành true nếu form không hợp lệ
     } else {
       const result = await checkLogin();
-      console.log(result);
 
       if (result === true) {
         handleLogin(); // Gọi handleLogin nếu checkLogin trả về true
