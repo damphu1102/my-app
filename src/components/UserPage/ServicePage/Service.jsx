@@ -25,9 +25,11 @@ export const Service = () => {
   const [remainingTime, setRemainingTime] = useState(data.remainingTime); // Lấy thời gian từ data
   const navigate = useNavigate(); // Khởi tạo useNavigate
   const token = localStorage.getItem("token"); // Lấy token từ localStorage
-  const fullName = localStorage.getItem("fullName");
-  const emailAccount = localStorage.getItem("emailAccount");
-  const phoneNumber = localStorage.getItem("phoneNumber");
+  const userDataString = localStorage.getItem("userData"); // Lấy chuỗi JSON userData từ localStorage
+  const userData = JSON.parse(userDataString); // Phân tích chuỗi JSON thành đối tượng JavaScript
+  const fullName = userData.fullName;
+  const emailAccount = userData.emailAccount;
+  const phoneNumber = userData.phoneNumber;
   const [toastMessage, setToastMessage] = useState(null);
 
   useEffect(() => {

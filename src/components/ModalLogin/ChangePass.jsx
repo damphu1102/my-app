@@ -4,7 +4,7 @@ import { Button, Col, Form, Modal } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../ModalLogin/changepass.scss";
 
-export const ChangePass = ({ show, onHide }) => {
+export const ChangePass = ({ show, onHide, setToastMessage }) => {
   const [passwordVisible, setPasswordVisible] = useState(false); // State để theo dõi trạng thái hiển thị mật khẩu
   const [passwordNewVisible, setPasswordNewVisible] = useState(false); // State để theo dõi trạng thái hiển thị mật khẩu
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -17,6 +17,8 @@ export const ChangePass = ({ show, onHide }) => {
   const accountId = userData.accountId;
   const [validated, setValidated] = useState(false); // Thêm state validated
   const [oldPasswordError, setOldPasswordError] = useState("");
+  const [oldPasswordChecked, setOldPasswordChecked] = useState(false);
+  const [samePasswordError, setSamePasswordError] = useState("");
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -32,6 +34,13 @@ export const ChangePass = ({ show, onHide }) => {
 
   const handleChangePassword = async () => {
     setValidated(true);
+    setSamePasswordError("");
+    setToastMessage(null);
+
+    if (newPassword === oldPassword) {
+      setSamePasswordError("Mật khẩu mới phải khác mật khẩu cũ");
+      return;
+    }
 
     try {
       const checkPassResponse = await axios.post(
@@ -43,6 +52,7 @@ export const ChangePass = ({ show, onHide }) => {
       );
 
       if (checkPassResponse.data === true) {
+        setOldPasswordChecked(true);
         // Old password is valid, proceed with new password update
         if (confirmNewPassword === newPassword && newPassword) {
           try {
@@ -60,13 +70,20 @@ export const ChangePass = ({ show, onHide }) => {
             );
 
             if (updatePasswordResponse.status === 200) {
-              alert("Cập nhật mật khẩu thành công.");
+              setToastMessage({
+                message: "Cập nhật mật khẩu thành công.",
+              });
               onHide();
             } else {
-              alert("Cập nhật mật khẩu thất bại.");
+              setToastMessage({
+                message: "Cập nhật mật khẩu thất bại.",
+              });
             }
           } catch (updateError) {
             alert("Đã xảy ra lỗi khi cập nhật mật khẩu.");
+            setToastMessage({
+              message: "Đã xảy ra lỗi khi cập nhật mật khẩu.",
+            });
             console.error("Lỗi cập nhật mật khẩu:", updateError);
           }
         } else {
@@ -76,10 +93,13 @@ export const ChangePass = ({ show, onHide }) => {
       } else {
         // Old password is invalid
         setOldPasswordError("Mật khẩu cũ không đúng.");
+        setOldPasswordChecked(false);
         setValidated(true); // Set validated to true to show old password error
       }
     } catch (checkPassError) {
-      alert("Lỗi xác thực mật khẩu cũ.");
+      setToastMessage({
+        message: "Lỗi xác thực mật khẩu cũ.",
+      });
       console.error("Lỗi xác thực mật khẩu cũ:", checkPassError);
       setValidated(false); // Set validated to false in case of error
     }
@@ -93,6 +113,7 @@ export const ChangePass = ({ show, onHide }) => {
       setConfirmNewPassword("");
       setOldPassword("");
       setOldPasswordError("");
+      setOldPasswordChecked(false);
     }
   }, [show]);
 
@@ -113,12 +134,11 @@ export const ChangePass = ({ show, onHide }) => {
                 required
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
+                isInvalid={validated && !oldPasswordChecked}
               />
-              {oldPasswordError && (
-                <Form.Text className="text-danger">
-                  {oldPasswordError}
-                </Form.Text>
-              )}
+              <Form.Control.Feedback type="invalid">
+                {oldPasswordError}
+              </Form.Control.Feedback>
             </Form.Group>
             <div className="eyes" onClick={togglePasswordVisibility}>
               {passwordVisible ? <FaEye /> : <FaEyeSlash />}
@@ -137,14 +157,16 @@ export const ChangePass = ({ show, onHide }) => {
                 onChange={(e) => setNewPassword(e.target.value)}
                 pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                 isInvalid={
-                  validated &&
-                  !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-                    newPassword
-                  )
+                  (validated &&
+                    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+                      newPassword
+                    )) ||
+                  samePasswordError
                 }
               />
               <Form.Control.Feedback type="invalid">
-                Ít nhất 8 ký tự, chữ hoa, chữ thường, số và ký tự đặc biệt.
+                {samePasswordError ||
+                  "Ít nhất 8 ký tự, chữ hoa, chữ thường, số và ký tự đặc biệt."}{" "}
               </Form.Control.Feedback>
             </Form.Group>
             <div className="eyes" onClick={togglePasswordNewVisibility}>
@@ -174,7 +196,7 @@ export const ChangePass = ({ show, onHide }) => {
             </div>
           </Col>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="modal-footer-changePass">
           <Button variant="secondary" onClick={onHide}>
             Close
           </Button>

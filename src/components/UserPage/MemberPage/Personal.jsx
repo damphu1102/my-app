@@ -193,7 +193,11 @@ export const Personal = () => {
           Cập nhật
         </Button>
       </div>
-      <ChangePass show={showPass} onHide={handleClose} />
+      <ChangePass
+        show={showPass}
+        onHide={handleClose}
+        setToastMessage={setToastMessage}
+      />
       <ToastContainer />
       {toastMessage && <Toast message={toastMessage.message} />}
     </div>

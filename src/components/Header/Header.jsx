@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../Header/header.scss";
 import { Menu } from "./Navbar";
 import { Login } from "../ModalLogin/Login";
@@ -21,7 +21,6 @@ export const Header = () => {
   const [toastMessage, setToastMessage] = useState(null);
   const [validated, setValidated] = useState(false); // Thêm state validated
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     const storedIsLoggedIn = localStorage.getItem("isLoggedIn");
@@ -55,64 +54,73 @@ export const Header = () => {
   };
 
   const handleLogin = async () => {
+    setToastMessage(null);
+
     try {
-      const response = await axios.post(
-        "http://localhost:8080/auth/login",
+      const checkLogin = await axios.post(
+        "http://localhost:8080/account/authenticate",
         login
       );
-      if (response.data !== null) {
-        const {
-          fullName,
-          emailAccount,
-          phoneNumber,
-          token,
-          accountId,
-          city,
-          district,
-          address,
-          dateBird,
-          roleGender,
-        } = response.data;
-        const userData = {
-          accountId,
-          fullName,
-          emailAccount,
-          phoneNumber,
-          city,
-          district,
-          address,
-          dateBird,
-          roleGender,
-        };
-        localStorage.setItem("userData", JSON.stringify(userData));
-        localStorage.setItem("token", token);
-        localStorage.setItem("isLoggedIn", "true"); // Lưu trạng thái đăng nhập
-        localStorage.setItem("loggedInUserName", login.userName); // Lưu userName
-        // Cập nhật trạng thái đăng nhập và userName
-        setIsLoggedIn(true);
-        setLoggedInUserName(login.userName); // Lưu userName
-        setValidated(false); // Reset validated
-        // Đóng modal đăng nhập
-        handleCloseLogin();
-        setToastMessage({ message: "Đăng nhập thành công." });
+      if (checkLogin.data === false) {
+        setToastMessage({ message: "User hoặc PassWord sai" });
+        setValidated(true);
       } else {
-        console.log("Username, Password không đúng");
+        try {
+          const response = await axios.post(
+            "http://localhost:8080/auth/login",
+            login
+          );
+          if (response.data !== null) {
+            const {
+              fullName,
+              emailAccount,
+              phoneNumber,
+              token,
+              accountId,
+              city,
+              district,
+              address,
+              dateBird,
+              roleGender,
+            } = response.data;
+            const userData = {
+              accountId,
+              fullName,
+              emailAccount,
+              phoneNumber,
+              city,
+              district,
+              address,
+              dateBird,
+              roleGender,
+            };
+            localStorage.setItem("userData", JSON.stringify(userData));
+            localStorage.setItem("token", token);
+            localStorage.setItem("isLoggedIn", "true"); // Lưu trạng thái đăng nhập
+            localStorage.setItem("loggedInUserName", login.userName); // Lưu userName
+            // Cập nhật trạng thái đăng nhập và userName
+            setIsLoggedIn(true);
+            setLoggedInUserName(login.userName); // Lưu userName
+            setValidated(false); // Reset validated
+            // Đóng modal đăng nhập
+            handleCloseLogin();
+            setToastMessage({ message: "Đăng nhập thành công." });
+          } else {
+            console.log("Username, Password không đúng");
+          }
+        } catch (error) {
+          // Xử lý lỗi đăng nhập
+          console.error("Login failed:", error);
+          // Hiển thị thông báo lỗi cho người dùng
+        }
       }
     } catch (error) {
-      // Xử lý lỗi đăng nhập
-      console.error("Login failed:", error);
-      // Hiển thị thông báo lỗi cho người dùng
+      console.error("Lỗi", error);
+      setValidated(false);
     }
   };
 
   const handleLogout = (e) => {
-    if (location.pathname !== "/") {
-      const timer = setTimeout(() => {
-        setToastMessage(null); // Reset toastMessage sau 1 giây
-      }, 1000);
-      navigate("/");
-      return () => clearTimeout(timer); // Clear timer nếu component unmount
-    }
     e.preventDefault();
     localStorage.removeItem("token");
     localStorage.removeItem("userData");
@@ -120,38 +128,8 @@ export const Header = () => {
     localStorage.removeItem("loggedInUserName"); // Xóa userName
     setLoggedInUserName("");
     setIsLoggedIn(false);
-
     setToastMessage({ message: "Đăng xuất thành công." });
-  };
-
-  const checkLogin = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/account/authenticate",
-        login
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Lỗi", error);
-      return false;
-    }
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định của form
-
-    if (login.userName === "" || login.passWord === "") {
-      setValidated(true); // Đặt validated thành true nếu form không hợp lệ
-    } else {
-      const result = await checkLogin();
-
-      if (result === true) {
-        handleLogin(); // Gọi handleLogin nếu checkLogin trả về true
-      } else {
-        setToastMessage({ message: "User hoặc Password sai." });
-        return;
-      }
-    }
+    navigate("/");
   };
 
   return (
@@ -199,7 +177,6 @@ export const Header = () => {
         login={login}
         setLogin={setLogin}
         validated={validated}
-        handleSubmit={handleSubmit}
       />
       <Register
         show={showRegister}

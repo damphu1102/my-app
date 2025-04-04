@@ -10,7 +10,7 @@ export const Login = ({
   setLogin,
   login,
   validated,
-  handleSubmit,
+  handleLogin,
 }) => {
   // const [rememberMe, setRememberMe] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false); // State để theo dõi trạng thái hiển thị mật khẩu
@@ -85,7 +85,7 @@ export const Login = ({
               />
             </Form.Group> */}
             <div className="btn_login">
-              <Button variant="primary" onClick={handleSubmit}>
+              <Button variant="primary" onClick={handleLogin}>
                 Đăng nhập
               </Button>
             </div>

@@ -4,18 +4,23 @@ import Navbar from "react-bootstrap/Navbar";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "../Header/navbar.scss";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const Menu = ({ setToastMessage }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const handleAboutClick = (e) => {
     if (!localStorage.getItem("token")) {
       e.preventDefault();
-      setToastMessage({ message: "Vui lòng đăng nhập để tiếp tục." });
+      setToastMessage(null);
+      setTimeout(() => {
+        setToastMessage({ message: "Vui lòng đăng nhập để tiếp tục." });
+      }, 200);
+    } else {
+      navigate("/about"); // Chỉ chuyển trang nếu đã đăng nhập
     }
   };
-
   return (
     <>
       <Navbar bg="light" data-bs-theme="light">
@@ -34,7 +39,6 @@ export const Menu = ({ setToastMessage }) => {
               Sự kiện
             </Nav.Link>
             <Nav.Link
-              href="/about"
               active={location.pathname === "/about"}
               onClick={handleAboutClick}
             >
