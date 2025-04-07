@@ -4,7 +4,7 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { LayoutRoot } from "./components/Layout/LayoutRoot";
-import { Login } from "./components/Login/Login";
+import { Login } from "./components/AdminPage/Login/Login";
 import { HomeAdmin } from "./components/AdminPage/HomeAdmin";
 import { Home } from "./components/Home/Home";
 import { MovieManager } from "./components/AdminPage/ContentPage/MovieManager";

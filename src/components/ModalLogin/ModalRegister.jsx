@@ -125,7 +125,7 @@ export const ModalRegister = ({
                   <Form.Control.Feedback type="invalid">
                     {userNameExists
                       ? "Username đã tồn tại"
-                      : "Username phải từ 2-20 ký tự"}
+                      : "Username phải từ 2-20 ký tự và không chứa khoảng trắng."}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
@@ -262,10 +262,11 @@ export const ModalRegister = ({
                 required
                 type="checkbox"
                 label="Đồng ý với điều khoản dịch vụ"
-                Checked={termsAccepted}
+                checked={termsAccepted}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
                 feedbackType="invalid"
                 feedback="Bạn phải đồng ý với điều khoản dịch vụ"
+                isInvalid={!termsAccepted} // Thêm isInvalid prop để hiển thị lỗi
               />
             </Form.Group>
 

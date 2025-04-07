@@ -5,7 +5,7 @@ export const Dashboard = () => {
   return (
     <aside className="dashboard">
       <div className="header_dash">
-        <h4>ADMIN</h4>
+        <h4>Admin</h4>
       </div>
       <div className="content_dash">
         <CardDash />

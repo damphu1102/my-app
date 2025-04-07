@@ -8,6 +8,7 @@ import axios from "axios";
 import { Dropdown } from "react-bootstrap";
 import { Toast } from "../UserPage/ToastPage";
 import { ToastContainer } from "react-toastify";
+import { FaUser } from "react-icons/fa";
 
 export const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -21,6 +22,7 @@ export const Header = () => {
   const [toastMessage, setToastMessage] = useState(null);
   const [validated, setValidated] = useState(false); // Thêm state validated
   const navigate = useNavigate();
+  const [loginError, setLogindError] = useState("");
 
   useEffect(() => {
     const storedIsLoggedIn = localStorage.getItem("isLoggedIn");
@@ -36,6 +38,7 @@ export const Header = () => {
     setShowLogin(false);
     setLogin({ userName: "", passWord: "" });
     setValidated(false);
+    setLogindError("");
   };
   const handleShowLogin = () => setShowLogin(true);
   const handleShowRegister = () => {
@@ -58,12 +61,12 @@ export const Header = () => {
 
     try {
       const checkLogin = await axios.post(
-        "http://localhost:8080/account/authenticate",
+        "http://localhost:8080/account/authenticateUser",
         login
       );
       if (checkLogin.data === false) {
-        setToastMessage({ message: "User hoặc PassWord sai" });
         setValidated(true);
+        setLogindError("User hoặc Password sai");
       } else {
         try {
           const response = await axios.post(
@@ -128,7 +131,11 @@ export const Header = () => {
     localStorage.removeItem("loggedInUserName"); // Xóa userName
     setLoggedInUserName("");
     setIsLoggedIn(false);
-    setToastMessage({ message: "Đăng xuất thành công." });
+    setToastMessage(null);
+    setTimeout(() => {
+      setToastMessage({ message: "Vui lòng đăng nhập để tiếp tục." });
+    }, 200);
+    setLogindError("");
     navigate("/");
   };
 
@@ -151,7 +158,7 @@ export const Header = () => {
           {isLoggedIn ? (
             <div className="drop_down">
               <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                <Dropdown.Toggle id="dropdown-basic">
                   {loggedInUserName}
                 </Dropdown.Toggle>
 
@@ -163,9 +170,12 @@ export const Header = () => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
+              <FaUser />
             </div>
           ) : (
-            <button onClick={handleShowLogin}>Login</button>
+            <div className="btn_login">
+              <button onClick={handleShowLogin}>Login</button>
+            </div>
           )}
         </div>
       </div>
@@ -177,6 +187,8 @@ export const Header = () => {
         login={login}
         setLogin={setLogin}
         validated={validated}
+        loginError={loginError}
+        setLogindError={setLogindError}
       />
       <Register
         show={showRegister}

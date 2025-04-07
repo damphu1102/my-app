@@ -15,15 +15,31 @@
     font-size: 1.2rem;
   }
   .login {
-    button {
-      background: linear-gradient(
-        91deg,
-        rgb(153, 107, 237) 0%,
-        rgb(7, 89, 212) 100%
-      );
-      padding: 8px 16px;
-      border-radius: 5px;
-      color: white;
+    .drop_down {
+      display: flex;
+      justify-content: center;
+      svg {
+        margin-top: 10px;
+      }
+      button {
+        background-color: #eee;
+        color: black;
+        border: none;
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+    }
+    .btn_login {
+      button {
+        background: linear-gradient(
+          91deg,
+          rgb(153, 107, 237) 0%,
+          rgb(7, 89, 212) 100%
+        );
+        padding: 8px 16px;
+        border-radius: 5px;
+        color: white;
+      }
     }
   }
 }

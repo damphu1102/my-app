@@ -11,6 +11,8 @@ export const Login = ({
   login,
   validated,
   handleLogin,
+  loginError,
+  setLogindError,
 }) => {
   // const [rememberMe, setRememberMe] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false); // State để theo dõi trạng thái hiển thị mật khẩu
@@ -24,6 +26,7 @@ export const Login = ({
       ...login,
       [e.target.name]: e.target.value,
     });
+    setLogindError("");
   };
 
   // const handleRememberMeChange = (e) => {
@@ -48,11 +51,13 @@ export const Login = ({
                 onChange={handleChange}
                 required
                 autocomplete="current-Username" // Thêm autocomplete
-                isInvalid={validated && !login.userName}
+                isInvalid={(validated && !login.userName) || loginError}
               />
 
               <Form.Control.Feedback type="invalid">
-                Vui lòng nhập tên đăng nhập
+                {validated && !login.userName
+                  ? "Vui lòng nhập tên đăng nhập"
+                  : loginError}
               </Form.Control.Feedback>
             </Form.Group>
 
@@ -66,10 +71,12 @@ export const Login = ({
                 onChange={handleChange}
                 required
                 autocomplete="current-password" // Thêm autocomplete
-                isInvalid={validated && !login.passWord}
+                isInvalid={(validated && !login.passWord) || loginError}
               />
               <Form.Control.Feedback type="invalid">
-                Vui lòng nhập mật khẩu
+                {validated && !login.passWord
+                  ? "Vui lòng nhập mật khẩu"
+                  : loginError}
               </Form.Control.Feedback>
 
               <div className="eyes_login" onClick={togglePasswordVisibility}>
