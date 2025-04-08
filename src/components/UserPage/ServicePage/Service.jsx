@@ -12,6 +12,7 @@ import { Timeout } from "../Timeout/Timeout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
 import { Toast } from "../ToastPage";
+import { Payment } from "../Payment/Payment";
 
 export const Service = () => {
   const location = useLocation();
@@ -31,6 +32,10 @@ export const Service = () => {
   const emailAccount = userData.emailAccount;
   const phoneNumber = userData.phoneNumber;
   const [toastMessage, setToastMessage] = useState(null);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     const fetchService = async () => {
@@ -196,12 +201,19 @@ export const Service = () => {
         <Button
           variant="success"
           style={{ width: "50%", marginLeft: "25%", marginBottom: "10px" }}
+          onClick={handleShow}
         >
           Thanh toán
         </Button>
       </div>
       <ToastContainer />
       {toastMessage && <Toast message={toastMessage.message} />}
+      <Payment
+        show={show}
+        onHide={handleClose}
+        data={data}
+        TotalPrice={TotalPrice}
+      />
     </div>
   );
 };
