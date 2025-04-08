@@ -87,7 +87,7 @@ export const MovieManager = () => {
         <Button variant="primary" onClick={handleAddMovie}>
           Tạo phim
         </Button>
-        <Form className="d-flex">
+        <Form className="d-flex_admin">
           <CiSearch className="search-icon" />
           <Form.Control
             type="search"

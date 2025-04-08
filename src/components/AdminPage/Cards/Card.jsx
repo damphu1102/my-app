@@ -21,7 +21,7 @@ export const CardDash = () => {
           <Accordion.Header>Quản lý rạp phim</Accordion.Header>
           <Accordion.Body>Nội dung 2</Accordion.Body>
         </Accordion.Item>
-        {/* <Accordion.Item eventKey="4">
+        <Accordion.Item eventKey="4">
           <Accordion.Header>Quản lý lịch chiếu</Accordion.Header>
           <Accordion.Body>Nội dung 2</Accordion.Body>
         </Accordion.Item>
@@ -52,7 +52,7 @@ export const CardDash = () => {
         <Accordion.Item eventKey="11">
           <Accordion.Header>Quản lý dịch vụ</Accordion.Header>
           <Accordion.Body>Nội dung 2</Accordion.Body>
-        </Accordion.Item> */}
+        </Accordion.Item>
       </Accordion>
     </>
   );

@@ -57,7 +57,7 @@ export const MovieInf = () => {
             <h5>Đạo diễn: {movie.director}</h5>
             <h5>Diễn viên: {movie.actor}</h5>
             <h5>Thể loại: {movie.genre}</h5>
-            <h5>Thời lượng: {movie.duration}</h5>
+            <h5>Thời lượng: {movie.duration} phút</h5>
             <h5>Ngôn ngữ: {movie.language}</h5>
             <h5>Ngày khởi chiếu: {movie.releaseDate}</h5>
           </div>

@@ -341,7 +341,7 @@ export const ModalMovie = ({
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="admin_modal">
           <Button variant="secondary" onClick={onHide}>
             Close
           </Button>

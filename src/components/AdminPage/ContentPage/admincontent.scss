@@ -9,10 +9,12 @@
 .control {
   padding-left: 40px;
   padding-top: 20px;
+  padding-right: 40px;
   display: flex;
+  justify-content: space-between;
 }
 
-.d-flex {
+.d-flex_admin {
   position: relative;
   display: flex;
   align-items: center;
@@ -27,9 +29,4 @@
     transform: translateY(-50%);
     pointer-events: none; /* Cho phép click xuyên qua icon */
   }
-}
-
-.control_select {
-  // display: flex;
-  margin-left: 30px;
 }
