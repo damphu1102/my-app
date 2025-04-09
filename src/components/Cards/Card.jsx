@@ -192,6 +192,7 @@ export const CardModalShowTime = ({
                 aria-label="Default select example"
                 onChange={handleLocationChange}
                 value={selectedLocation}
+                style={{ marginBottom: "20px" }}
               >
                 <option value="">--Chọn khu vực---</option>
                 <option value="HaNoi">HaNoi</option>

@@ -32,6 +32,9 @@ export const ModalMovie = ({
   const [updateAt, setUpdateAt] = useState(
     new Date().toISOString().slice(0, 10)
   ); // Thêm state updateAt
+  const adminDataString = localStorage.getItem("adminData"); // Lấy chuỗi JSON userData từ localStorage
+  const adminData = JSON.parse(adminDataString);
+  const token = adminData.token;
 
   useEffect(() => {
     if (isEditMode && movieToEdit) {
@@ -48,7 +51,12 @@ export const ModalMovie = ({
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/movie/delete/${movieToEdit.movieId}`
+        `http://localhost:8080/movie/delete/${movieToEdit.movieId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Gửi token trong header
+          },
+        }
       );
       if (response.status === 200) {
         alert("Xóa phim thành công!");
@@ -62,6 +70,28 @@ export const ModalMovie = ({
 
   // API Thêm mới/Chỉnh sửa
   const submitForm = async () => {
+    // Kiểm tra nếu có bất kỳ trường bắt buộc nào bị bỏ trống
+    if (
+      !newMovie.movieName.trim() ||
+      !newMovie.director.trim() ||
+      !newMovie.actor.trim() ||
+      !newMovie.genre ||
+      !newMovie.language ||
+      !newMovie.image.trim() ||
+      !newMovie.trailer.trim() ||
+      !newMovie.releaseDate ||
+      !newMovie.statusMovie ||
+      !newMovie.duration ||
+      isNaN(newMovie.duration) ||
+      parseInt(newMovie.duration) < 0 ||
+      !newMovie.viewingAge ||
+      isNaN(newMovie.viewingAge) ||
+      parseInt(newMovie.viewingAge) < 0
+    ) {
+      alert("Vui lòng điền đầy đủ thông tin bắt buộc.");
+      return; // Ngăn không cho gọi API nếu có lỗi
+    }
+
     try {
       let response;
       if (isEditMode && movieToEdit) {
@@ -70,13 +100,26 @@ export const ModalMovie = ({
           {
             ...newMovie,
             updateDate: updateAt,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Gửi token trong header
+            },
           }
         );
       } else {
-        response = await axios.post(`http://localhost:8080/movie/create`, {
-          ...newMovie,
-          createAt: createAt, // Gửi ngày tạo khi thêm mới
-        });
+        response = await axios.post(
+          `http://localhost:8080/movie/create`,
+          {
+            ...newMovie,
+            createAt: createAt, // Gửi ngày tạo khi thêm mới
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Gửi token trong header
+            },
+          }
+        );
       }
 
       if (response.status === 200) {
@@ -211,7 +254,12 @@ export const ModalMovie = ({
             <Row className="g-2">
               <Col md>
                 <Form.Group className="mb-3" controlId="formBasicImage">
-                  <Form.Label>Link hình ảnh</Form.Label>
+                  <Form.Label>
+                    Link hình ảnh{" "}
+                    <span style={{ fontStyle: "italic" }}>
+                      (Lấy link từ Cloudinary)
+                    </span>
+                  </Form.Label>
                   <Form.Control
                     type="url"
                     placeholder="Vui lòng điền link vào đây"
@@ -227,7 +275,12 @@ export const ModalMovie = ({
               </Col>
               <Col md>
                 <Form.Group className="mb-3" controlId="formBasicTrailer">
-                  <Form.Label>Link trailer</Form.Label>
+                  <Form.Label>
+                    Link trailer{" "}
+                    <span style={{ fontStyle: "italic" }}>
+                      (Lấy link nhúng của Youtube)
+                    </span>
+                  </Form.Label>
                   <Form.Control
                     type="url"
                     placeholder="Vui lòng điền link vào đây"

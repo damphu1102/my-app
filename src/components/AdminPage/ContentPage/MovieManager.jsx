@@ -7,6 +7,7 @@ import { Table } from "react-bootstrap";
 import { ModalMovie } from "../Modal/ModalMovie";
 import { CiSearch } from "react-icons/ci";
 import { Pagination } from "../Pagination/Pagination";
+import { LuChevronsUpDown } from "react-icons/lu";
 
 export const MovieManager = () => {
   const [movies, setMovies] = useState([]);
@@ -19,6 +20,9 @@ export const MovieManager = () => {
   const [sortField, setSortField] = useState("movieId"); // Trường sắp xếp mặc định
   const [sortType, setSortType] = useState("DESC"); // Loại sắp xếp mặc định
   const [totalPages, setTotalPages] = useState(0); // Thêm state totalPages
+  const adminDataString = localStorage.getItem("adminData"); // Lấy chuỗi JSON userData từ localStorage
+  const adminData = JSON.parse(adminDataString);
+  const token = adminData.token;
 
   const handleAddMovie = () => {
     setIsEditMode(false);
@@ -38,13 +42,17 @@ export const MovieManager = () => {
       if (search) {
         url += `&movieName=${search}`;
       }
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Gửi token trong header
+        },
+      });
       setMovies(response.data.content);
       setTotalPages(response.data.totalPages); // Cập nhật totalPages
     } catch (error) {
       console.error("Error fetching movies:", error);
     }
-  }, [search, page, pageSize, sortField, sortType]);
+  }, [search, page, pageSize, sortField, sortType, token]);
 
   useEffect(() => {
     fetchMovies();
@@ -69,17 +77,17 @@ export const MovieManager = () => {
     setPage(1); // Reset page to 1 when changing page size
   };
 
-  // const handleSortFieldChange = (newField) => {
-  //   setSortField(newField);
-  //   setPage(1); // Reset page to 1 when changing sort field
-  // };
-
-  // const handleSortTypeChange = (newType) => {
-  //   setSortType(newType);
-  //   setPage(1); // Reset page to 1 when changing sort type
-  // };
-
-  console.log(movies);
+  const handleSort = (field) => {
+    if (sortField === field) {
+      // Nếu đang sắp xếp theo trường này, hãy đảo ngược thứ tự
+      setSortType(sortType === "ASC" ? "DESC" : "ASC");
+    } else {
+      // Nếu không, hãy sắp xếp theo trường này và đặt thứ tự mặc định là tăng dần (ASC)
+      setSortField(field);
+      setSortType("ASC");
+    }
+    setPage(1); // Reset về trang đầu tiên sau khi thay đổi sắp xếp
+  };
 
   return (
     <div className="content_page">
@@ -119,7 +127,18 @@ export const MovieManager = () => {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Tên phim</th>
+              <th>
+                <div
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <p> Tên phim</p>
+                  <LuChevronsUpDown onClick={() => handleSort("movieName")} />
+                </div>
+              </th>
               <th>Thể loại</th>
               <th>Trạng thái</th>
               <th>Năm phát hành</th>
