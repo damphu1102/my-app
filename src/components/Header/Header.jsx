@@ -133,7 +133,7 @@ export const Header = () => {
     setIsLoggedIn(false);
     setToastMessage(null);
     setTimeout(() => {
-      setToastMessage({ message: "Vui lòng đăng nhập để tiếp tục." });
+      setToastMessage({ message: "Đăng xuất thành công." });
     }, 200);
     setLogindError("");
     navigate("/");
@@ -163,8 +163,16 @@ export const Header = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#">Trang cá nhân</Dropdown.Item>
-                  <Dropdown.Item href="#">Cài đặt</Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link
+                      to="/about"
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
+                      {" "}
+                      Trang cá nhân
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item>Cài đặt</Dropdown.Item>
                   <Dropdown.Item onClick={handleLogout}>
                     Đăng xuất
                   </Dropdown.Item>

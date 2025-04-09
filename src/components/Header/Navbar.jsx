@@ -10,9 +10,8 @@ export const Menu = ({ setToastMessage }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleAboutClick = (e) => {
+  const handleAboutClick = () => {
     if (!localStorage.getItem("token")) {
-      e.preventDefault();
       setToastMessage(null);
       setTimeout(() => {
         setToastMessage({ message: "Vui lòng đăng nhập để tiếp tục." });

@@ -380,7 +380,7 @@ export const CardInfVoucher = ({ vouchers, onVoucherChange }) => {
           aria-label="Default select example"
           onChange={(e) => onVoucherChange(e.target.value)}
         >
-          <option value={null}>Open this select menu</option>
+          <option value="0">---</option>
           {vouchers.map((voucher) => (
             <option key={voucher.voucherId} value={voucher.voucherId}>
               {voucher.nameVoucher}

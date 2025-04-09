@@ -4,10 +4,11 @@ import { Button, Modal } from "react-bootstrap";
 export const Payment = ({ show, onHide, data, TotalPrice }) => {
   const handlePayment = async () => {
     try {
-      const response = await axios.post(`http://localhost:8080/api/vnpay`, {
+      const response = await axios.post(`http://localhost:8080/api/zalopay`, {
         amount: TotalPrice,
       });
-      window.location.href = response.data;
+      const url = response.data;
+      window.location.href = url.order_url;
     } catch (error) {
       console.error("Lỗi giao dịch");
     }
