@@ -15,6 +15,7 @@ import { Seat } from "./components/UserPage/SeatPage/Seat";
 import { Service } from "./components/UserPage/ServicePage/Service";
 import { Event } from "./components/UserPage/EventPage/Event";
 import { Member } from "./components/UserPage/MemberPage/Member";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const router = createBrowserRouter([
   {
@@ -77,7 +78,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <RouterProvider router={router}>
     <React.StrictMode>
-      <Home />
+      <SpeedInsights />
     </React.StrictMode>
   </RouterProvider>
 );

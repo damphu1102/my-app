@@ -2,6 +2,8 @@ import axios from "axios";
 import { Button, Modal } from "react-bootstrap";
 
 export const Payment = ({ show, onHide, data, TotalPrice }) => {
+  const movieName = data.movie.movieName;
+
   const handlePayment = async () => {
     try {
       const response = await axios.post(`http://localhost:8080/api/zalopay`, {

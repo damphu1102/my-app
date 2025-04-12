@@ -200,12 +200,13 @@ export const Service = () => {
         </div>
         <Button
           variant="success"
-          style={{ width: "50%", marginLeft: "25%", marginBottom: "10px" }}
+          style={{ width: "50%", marginLeft: "25%" }}
           onClick={handleShow}
         >
           Thanh toán
         </Button>
       </div>
+      <div></div>
       <ToastContainer />
       {toastMessage && <Toast message={toastMessage.message} />}
       <Payment
