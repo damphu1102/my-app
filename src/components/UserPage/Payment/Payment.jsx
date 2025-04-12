@@ -13,6 +13,7 @@ export const Payment = ({ show, onHide, data, TotalPrice }) => {
       console.error("Lỗi giao dịch");
     }
   };
+
   return (
     <>
       <Modal show={show} onHide={onHide} centered>
