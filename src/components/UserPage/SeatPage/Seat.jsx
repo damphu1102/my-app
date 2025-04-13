@@ -20,28 +20,51 @@ export const Seat = () => {
   const [toastMessage, setToastMessage] = useState(null);
 
   useEffect(() => {
+    const resetAndFetchSeats = async () => {
+      try {
+        const resetResponse = await axios.post(
+          "http://localhost:8080/seat/reset-all",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Reset seat statuses:", resetResponse.data);
+        // Sau khi reset thành công, fetch lại danh sách ghế
+        await fetchRowSeat();
+      } catch (resetError) {
+        console.error("Error resetting seat statuses:", resetError);
+        // Xử lý lỗi nếu reset không thành công, có thể vẫn fetch ghế để hiển thị trạng thái hiện tại
+        await fetchRowSeat();
+      }
+    };
+
     const fetchRowSeat = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/seat`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Gửi token trong header
+            Authorization: `Bearer ${token}`,
           },
         });
-        // Cập nhật dữ liệu từ API để bao gồm thuộc tính 'img'
         const seatsWithImg = response.data.map((seat) => ({
           ...seat,
           img:
             seat.seatStatus === "selected"
               ? seat.imgSelected
+              : seat.seatStatus === "success"
+              ? seat.imgSuccess
               : seat.imgUnselected,
-          seatStatus: seat.seatStatus || "un_selected", // Thêm seatStatus từ API
+          seatStatus: seat.seatStatus || "un_selected",
         }));
         setRowSeat(seatsWithImg);
-      } catch (error) {
-        console.error("Error fetching row seat:", error);
+      } catch (fetchError) {
+        console.error("Error fetching row seat:", fetchError);
       }
     };
-    fetchRowSeat();
+
+    resetAndFetchSeats();
   }, [token]);
 
   // Lấy danh sách các hàng ghế duy nhất
@@ -99,6 +122,7 @@ export const Seat = () => {
   const handleDataNext = () => {
     const selectedSeatsInfo = selectedSeats.map((seat) => ({
       seatNumber: seat.seatNumber,
+      seatId: seat.seat_id,
     }));
     const totalPriceSeat = selectedSeats.reduce(
       (total, seat) => total + seat.seatPrice,
@@ -168,7 +192,16 @@ export const Seat = () => {
                 .map((seat) => (
                   <div
                     className="container_row"
-                    onClick={() => handleSeatClick(seat)}
+                    onClick={() => {
+                      // Chỉ cho phép click nếu trạng thái ghế không phải là 'success'
+                      if (seat.seatStatus !== "success") {
+                        handleSeatClick(seat);
+                      }
+                    }}
+                    style={{
+                      cursor:
+                        seat.seatStatus === "success" ? "default" : "pointer",
+                    }}
                   >
                     <img
                       key={seat.seat_id}

@@ -2,12 +2,12 @@ import axios from "axios";
 import { Button, Modal } from "react-bootstrap";
 
 export const Payment = ({ show, onHide, data, TotalPrice }) => {
-  const movieName = data.movie.movieName;
-
+  const seatIds = data.selectedSeatsInfo.map((seatInfo) => seatInfo.seatId);
   const handlePayment = async () => {
     try {
       const response = await axios.post(`http://localhost:8080/api/zalopay`, {
         amount: TotalPrice,
+        selectedSeats: seatIds,
       });
       const url = response.data;
       window.location.href = url.order_url;
@@ -15,6 +15,10 @@ export const Payment = ({ show, onHide, data, TotalPrice }) => {
       console.error("Lỗi giao dịch");
     }
   };
+
+  // useEffect(() => {
+  //   console.log("List of seatIds:", seatIds);
+  // }, [data]); // Log lại nếu `data` thay đổi (tùy chọn)
 
   return (
     <>
