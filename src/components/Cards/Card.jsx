@@ -224,7 +224,7 @@ export const CardModalShowTime = ({
                   <option value="">--Chọn ngày---</option>
                   {dates.map((date) => (
                     <option key={date} value={date}>
-                      {date}
+                      {moment(date).format("DD/MM/YYYY")}
                     </option>
                   ))}
                 </Form.Select>

@@ -232,7 +232,7 @@ export const Seat = () => {
           <p>Tên phim: {data.movie.movieName}</p>
           <p>Rạp chiếu: {data.selectedCinema}</p>
           <p>Phòng chiếu: {data.room} </p>
-          <p>Ngày chiếu: {data.date}</p>
+          <p>Ngày chiếu: {moment(data.date).format("DD/MM/YYYY")}</p>
           <p>
             Giờ chiếu: {moment(data.activeTime, "HH:mm:ss").format("HH:mm")}
           </p>
