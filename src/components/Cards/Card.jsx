@@ -195,9 +195,9 @@ export const CardModalShowTime = ({
                 style={{ marginBottom: "20px" }}
               >
                 <option value="">--Chọn khu vực---</option>
-                <option value="HaNoi">HaNoi</option>
-                <option value="DaNang">DaNang</option>
-                <option value="HoChiMinh">HoChiMinh</option>
+                <option value="HaNoi">Hà Nội</option>
+                <option value="DaNang">Đà Nẵng</option>
+                <option value="HoChiMinh">Hồ Chí Minh</option>
               </Form.Select>
               {/* CinemaName */}
               {selectedLocation && cinemas.length > 0 && (

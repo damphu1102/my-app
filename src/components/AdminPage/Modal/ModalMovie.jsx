@@ -208,22 +208,20 @@ export const ModalMovie = ({
                     }}
                   >
                     <option>---</option>
-                    <option value={newMovie.genre.Drama}>Drama</option>
-                    <option value={newMovie.genre.Thriller}>Thriller</option>
-                    <option value={newMovie.genre.Action}>Action</option>
-                    <option value={newMovie.genre.Historical}>
-                      Historical
-                    </option>
-                    <option value={newMovie.genre.Comedy}>Comedy</option>
-                    <option value={newMovie.genre.Romantic}>Romantic</option>
-                    <option value={newMovie.genre.Animation}>Animation</option>
+                    <option value={newMovie.genre.Drama}>Tâm lý</option>
+                    <option value={newMovie.genre.Thriller}>Kinh dị</option>
+                    <option value={newMovie.genre.Action}>Hành động</option>
+                    <option value={newMovie.genre.Historical}>Lịch sử</option>
+                    <option value={newMovie.genre.Comedy}>Hài</option>
+                    <option value={newMovie.genre.Romantic}>Lãng mạn</option>
+                    <option value={newMovie.genre.Animation}>Hoạt hình</option>
                     <option value={newMovie.genre.Psychology}>
-                      Psychology
+                      Tâm lý học
                     </option>
-                    <option value={newMovie.genre.Horror}>Horror</option>
-                    <option value={newMovie.genre.Mystery}>Mystery</option>
-                    <option value={newMovie.genre.Adventure}>Adventure</option>
-                    <option value={newMovie.genre.Adventure}>Horrified</option>
+                    <option value={newMovie.genre.Horror}>Kinh dị</option>
+                    <option value={newMovie.genre.Mystery}>Bí ẩn</option>
+                    <option value={newMovie.genre.Adventure}>Phiêu lưu</option>
+                    <option value={newMovie.genre.Adventure}>Kinh hoàng</option>
                   </Form.Select>
                 </Form.Group>
               </Col>

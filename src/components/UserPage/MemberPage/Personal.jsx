@@ -131,7 +131,7 @@ export const Personal = () => {
                 onChange={(e) => handleChange(e, "roleGender")}
               >
                 <option value={userData.roleGender.Nam}>Nam</option>
-                <option value={userData.roleGender.Nu}>Nu</option>
+                <option value={userData.roleGender.Nu}>Nữ</option>
               </Form.Select>
             </Form.Group>
           </Col>
