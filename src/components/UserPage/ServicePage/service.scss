@@ -15,14 +15,13 @@
         font-size: 1.5rem;
         text-align: center;
         font-weight: bolder;
-        margin: 20px 0px;
+        margin-top: 10px;
         color: red;
       }
       .label_account {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         place-items: center;
-        margin-bottom: 10px;
         label {
           font-size: 1.2rem;
           font-weight: bold;
@@ -46,14 +45,13 @@
         font-size: 1.5rem;
         text-align: center;
         font-weight: bolder;
-        margin: 20px 0px;
+        margin-top: 10px;
         color: red;
       }
       .label_service {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         place-items: center;
-        margin-bottom: 10px;
         label {
           font-size: 1.2rem;
           font-weight: bold;
@@ -98,8 +96,8 @@
         font-size: 1.5rem;
         text-align: center;
         font-weight: bolder;
-        margin: 20px 0px;
         color: red;
+        margin-top: 10px;
       }
       .voucher {
         margin-left: 20px;
