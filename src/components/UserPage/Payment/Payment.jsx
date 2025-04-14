@@ -1,13 +1,34 @@
 import axios from "axios";
+import moment from "moment/moment";
+import { useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 
 export const Payment = ({ show, onHide, data, TotalPrice }) => {
   const seatIds = data.selectedSeatsInfo.map((seatInfo) => seatInfo.seatId);
+  const userDataString = localStorage.getItem("userData"); // Lấy chuỗi JSON userData từ localStorage
+  const userData = JSON.parse(userDataString);
+  const accountId = userData.accountId;
+  const movieName = data.movie.movieName;
+  const seatNumber = data.selectedSeatsInfo.map(
+    (seatInfo) => seatInfo.seatNumber
+  );
+  const cinema = data.selectedCinema;
+  const room = data.room;
+  const time = data.activeTime;
+  const date = data.date;
+
   const handlePayment = async () => {
     try {
       const response = await axios.post(`http://localhost:8080/api/zalopay`, {
         amount: TotalPrice,
         selectedSeats: seatIds,
+        accountId: accountId,
+        movieName: movieName,
+        seatNumber: seatNumber,
+        cinema: cinema,
+        room: room,
+        time: time,
+        date: date,
       });
       const url = response.data;
       window.location.href = url.order_url;
@@ -16,9 +37,9 @@ export const Payment = ({ show, onHide, data, TotalPrice }) => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("List of seatIds:", seatIds);
-  // }, [data]); // Log lại nếu `data` thay đổi (tùy chọn)
+  useEffect(() => {
+    console.log(data);
+  }, [data]); // Log lại nếu `data` thay đổi (tùy chọn)
 
   return (
     <>
@@ -31,7 +52,9 @@ export const Payment = ({ show, onHide, data, TotalPrice }) => {
           <p>Rạp chiếu: {data.selectedCinema}</p>
           <p>Phòng chiếu: {data.room} </p>
           <p>Ngày chiếu: {data.date}</p>
-          <p>Giờ chiếu: {data.activeTime}</p>
+          <p>
+            Giờ chiếu: {moment(data.activeTime, "HH:mm:ss").format("HH:mm")}
+          </p>
           <p>
             Ghế:{" "}
             {data.selectedSeatsInfo.map((seat, index) => (

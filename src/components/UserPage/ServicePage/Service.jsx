@@ -13,6 +13,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
 import { Toast } from "../ToastPage";
 import { Payment } from "../Payment/Payment";
+import moment from "moment/moment";
 
 export const Service = () => {
   const location = useLocation();
@@ -187,7 +188,9 @@ export const Service = () => {
           <p>Rạp chiếu: {data.selectedCinema}</p>
           <p>Phòng chiếu: {data.room} </p>
           <p>Ngày chiếu: {data.date}</p>
-          <p>Giờ chiếu: {data.activeTime}</p>
+          <p>
+            Giờ chiếu: {moment(data.activeTime, "HH:mm:ss").format("HH:mm")}
+          </p>
           <p>
             Ghế:{" "}
             {data.selectedSeatsInfo.map((seat, index) => (

@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment/moment";
 import { useCallback, useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
@@ -259,7 +260,7 @@ export const CardModalShowTime = ({
                                   : "black", // Thêm inline style
                             }}
                           >
-                            {showTime.time}
+                            {moment(showTime.time, "HH:mm:ss").format("HH:mm")}
                           </Button>
                         </div>
                       ))

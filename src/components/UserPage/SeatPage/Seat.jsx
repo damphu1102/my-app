@@ -8,6 +8,7 @@ import { Timeout } from "../Timeout/Timeout";
 import "react-toastify/dist/ReactToastify.css"; // Nhập CSS
 import { Toast } from "../ToastPage";
 import { ToastContainer } from "react-toastify";
+import moment from "moment/moment";
 
 export const Seat = () => {
   const location = useLocation();
@@ -232,7 +233,9 @@ export const Seat = () => {
           <p>Rạp chiếu: {data.selectedCinema}</p>
           <p>Phòng chiếu: {data.room} </p>
           <p>Ngày chiếu: {data.date}</p>
-          <p>Giờ chiếu: {data.activeTime}</p>
+          <p>
+            Giờ chiếu: {moment(data.activeTime, "HH:mm:ss").format("HH:mm")}
+          </p>
           <p>Ghế: {selectedSeats.map((seat) => seat.seatNumber).join(", ")}</p>
           <p>
             Giá vé:{" "}
