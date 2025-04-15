@@ -170,14 +170,14 @@ export const Service = () => {
                 })}
               </p>
             </div>
+            <div className="time_out">
+              <Timeout
+                initialTime={remainingTime}
+                onTimeout={handleTimeout}
+                onTimeChange={handleTimeChange}
+              />
+            </div>
           </div>
-        </div>
-        <div className="time_out">
-          <Timeout
-            initialTime={remainingTime}
-            onTimeout={handleTimeout}
-            onTimeChange={handleTimeChange}
-          />
         </div>
       </div>
       <div className="inf">
@@ -203,7 +203,10 @@ export const Service = () => {
         </div>
         <Button
           variant="success"
-          style={{ width: "50%", marginLeft: "25%", marginBottom: "10px" }}
+          style={{
+            width: "50%",
+            marginLeft: "25%",
+          }}
           onClick={handleShow}
         >
           Thanh toán

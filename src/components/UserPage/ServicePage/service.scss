@@ -50,7 +50,7 @@
       }
       .label_service {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 1fr 1fr 2fr 1fr;
         place-items: center;
         label {
           font-size: 1.2rem;
@@ -61,9 +61,8 @@
       .input {
         .service-item {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: 1fr 1fr 2fr 1fr;
           place-items: center;
-          margin-bottom: 50px;
           p {
             font-size: 1.2rem;
           }
@@ -130,14 +129,15 @@
       font-size: 1.2rem;
       font-weight: bold;
       float: right;
-      margin-right: 120px;
+      margin: 20px 50px 0px 20px;
     }
   }
 
   .inf {
     border-left: 1px solid rgb(220, 208, 208);
     .inf_showtime {
-      margin: 20px 10px;
+      margin: 10px;
+      z-index: 10;
       h3 {
         text-align: center;
         margin-bottom: 20px;

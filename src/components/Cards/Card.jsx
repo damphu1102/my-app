@@ -340,6 +340,7 @@ export const CardInfService = ({
           <label>Dịch vụ đi kèm</label>
         </div>
         <div className="label_service">
+          <label></label>
           <label>Combo</label>
           <label>Mô tả</label>
           <label>Số lượng</label>
@@ -347,6 +348,7 @@ export const CardInfService = ({
         <div className="input">
           {services.map((service) => (
             <div key={service.serviceId} className="service-item">
+              <img src={service.imageService} alt="ảnh dịch vụ" />
               <p>{service.nameService}</p>
               <p>{service.descriptionService}</p>
               <div className="quantity">
