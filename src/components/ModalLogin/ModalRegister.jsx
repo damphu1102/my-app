@@ -264,8 +264,6 @@ export const ModalRegister = ({
                 label="Đồng ý với điều khoản dịch vụ"
                 checked={termsAccepted}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
-                feedbackType="invalid"
-                feedback="Bạn phải đồng ý với điều khoản dịch vụ"
                 isInvalid={!termsAccepted} // Thêm isInvalid prop để hiển thị lỗi
               />
             </Form.Group>

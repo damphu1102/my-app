@@ -6,8 +6,22 @@
 .bg-light {
   background-color: #eee !important;
 }
-.d-flex {
+.d-flex_user {
+  position: relative;
+  display: flex;
+  align-items: center;
   margin-left: 100px;
+  .me-2 {
+    padding-left: 30px;
+  }
+  .search-icon {
+    margin-right: 5px;
+    position: absolute;
+    left: 10px; /* Điều chỉnh vị trí icon */
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Cho phép click xuyên qua icon */
+  }
 }
 .navbar-expand .navbar-nav .nav-link {
   padding: 0;
@@ -15,4 +29,51 @@
 
 .nav-link.active {
   color: #ff0000 !important;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 400px;
+  max-height: 400px;
+  background-color: #fff;
+  color: #343a40;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 20;
+  overflow-y: auto; /* Thêm thanh cuộn dọc khi nội dung vượt quá max-height */
+  overflow-x: hidden; /* Ẩn thanh cuộn ngang nếu có */
+
+  .search-result-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #bdb4b4;
+    }
+
+    .result-image {
+      width: 80px; /* Kích thước hình ảnh */
+      object-fit: cover;
+      margin-right: 10px;
+      border-radius: 5px;
+      margin: 0 15%;
+    }
+    .inf_movie {
+      p {
+        color: red;
+        font-size: 1rem;
+      }
+      span {
+        font-size: 1rem;
+        color: black;
+      }
+    }
+  }
 }
