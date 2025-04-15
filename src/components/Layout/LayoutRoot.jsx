@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { Toast } from "../UserPage/ToastPage";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 export const LayoutRoot = () => {
   const [searchParams] = useSearchParams();
@@ -64,6 +65,7 @@ export const LayoutRoot = () => {
       <Footer />
       <ToastContainer />
       {toastMessage && <Toast message={toastMessage?.message} />}
+      <SpeedInsights />
     </>
   );
 };
