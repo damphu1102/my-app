@@ -7,12 +7,14 @@ import { CardTabMovie } from "../../../Cards/Card";
 import { Cinema } from "../../CinemaModal/Cinema";
 import { ToastContainer } from "react-toastify";
 import { Toast } from "../../ToastPage";
+import moment from "moment/moment";
 
 export const MovieInf = () => {
   const [movie, setMovie] = useState("");
   const { movieId } = useParams();
   const [show, setShow] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+  const statusMovie = movie.statusMovie;
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -46,7 +48,13 @@ export const MovieInf = () => {
       <div className="content_card">
         <div className="card_movie">
           <img src={movie.image} alt={movie.movieName} />
-          <Button variant="outline-primary" onClick={handleShow}>
+          <Button
+            variant="outline-primary"
+            onClick={handleShow}
+            disabled={
+              statusMovie === "comingSoon" || statusMovie === "specialScreening"
+            }
+          >
             Đặt vé
           </Button>
         </div>
@@ -59,7 +67,9 @@ export const MovieInf = () => {
             <h5>Thể loại: {movie.genre}</h5>
             <h5>Thời lượng: {movie.duration} phút</h5>
             <h5>Ngôn ngữ: {movie.language}</h5>
-            <h5>Ngày khởi chiếu: {movie.releaseDate}</h5>
+            <h5>
+              Ngày khởi chiếu: {moment(movie.releaseDate).format("DD/MM/YYYY")}
+            </h5>
           </div>
         </div>
       </div>
