@@ -191,7 +191,7 @@ export const Service = () => {
           <p>
             Giờ chiếu: {moment(data.activeTime, "HH:mm:ss").format("HH:mm")}
           </p>
-          <p>
+          <p style={{ maxHeight: "70px", overflowY: "auto", height: "70px" }}>
             Ghế:{" "}
             {data.selectedSeatsInfo.map((seat, index) => (
               <span key={index}>

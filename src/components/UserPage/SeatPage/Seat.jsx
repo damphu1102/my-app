@@ -236,7 +236,9 @@ export const Seat = () => {
           <p>
             Giờ chiếu: {moment(data.activeTime, "HH:mm:ss").format("HH:mm")}
           </p>
-          <p>Ghế: {selectedSeats.map((seat) => seat.seatNumber).join(", ")}</p>
+          <p style={{ maxHeight: "70px", overflowY: "auto", height: "70px" }}>
+            Ghế: {selectedSeats.map((seat) => seat.seatNumber).join(", ")}
+          </p>
           <p>
             Giá vé:{" "}
             {selectedSeats

@@ -19,7 +19,7 @@ export const Member = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     // Cập nhật URL khi tab thay đổi (nếu cần)
-    window.history.pushState({}, "", `/members?tab=${tab}`);
+    window.history.pushState({}, "", `/about?tab=${tab}`);
   };
 
   const renderContent = () => {
