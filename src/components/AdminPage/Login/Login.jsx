@@ -11,6 +11,7 @@ export const Login = () => {
     userName: "",
     passWord: "",
   });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -21,16 +22,18 @@ export const Login = () => {
       ...login,
       [e.target.name]: e.target.value,
     });
+    setError(""); // Clear error on input change
   };
 
   const handleLogin = async () => {
+    setError(""); // Clear any previous error
     try {
       const checkLogin = await axios.post(
         "http://localhost:8080/account/authenticateAdmin",
         login
       );
       if (checkLogin.data === false) {
-        console.log("User hoặc Password sai");
+        setError("Tên đăng nhập hoặc mật khẩu không đúng.");
       } else {
         try {
           const response = await axios.post(
@@ -46,7 +49,7 @@ export const Login = () => {
             localStorage.setItem("adminData", JSON.stringify(adminData));
             navigate("/home_admin");
           } else {
-            console.log("User hoặc mật khẩu sai");
+            setError("Tên đăng nhập hoặc mật khẩu không đúng.");
           }
         } catch (error) {
           console.error("Login failed:", error);
@@ -65,6 +68,18 @@ export const Login = () => {
         </div>
         <div className="form_login">
           <Form>
+            {error && (
+              <p
+                className="error-message"
+                style={{
+                  color: "red",
+                  textAlign: "center",
+                  marginBottom: "10px",
+                }}
+              >
+                {error}
+              </p>
+            )}
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Nhập username</Form.Label>
               <Form.Control
@@ -73,9 +88,12 @@ export const Login = () => {
                 onChange={handleChange}
                 name="userName" // Đảm bảo trùng khớp với tên trong state
                 value={login?.userName || ""}
+                isInvalid={!!error && !login.userName}
               />
+              <Form.Control.Feedback type="invalid">
+                Vui lòng nhập tên đăng nhập.
+              </Form.Control.Feedback>
             </Form.Group>
-
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Nhập mật khẩu</Form.Label>
               <Form.Control
@@ -84,7 +102,11 @@ export const Login = () => {
                 onChange={handleChange}
                 name="passWord"
                 value={login?.passWord || ""}
+                isInvalid={!!error && !login.passWord}
               />
+              <Form.Control.Feedback type="invalid">
+                Vui lòng nhập mật khẩu.
+              </Form.Control.Feedback>
               <div className="eyes_login" onClick={togglePasswordVisibility}>
                 {passwordVisible ? <FaEye /> : <FaEyeSlash />}
               </div>

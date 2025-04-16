@@ -14,6 +14,7 @@ export const Header = ({ username }) => {
   return (
     <div className="container_header">
       <div className="content_admin">
+        <div></div>
         <div className="login_admin">
           <Dropdown>
             <Dropdown.Toggle id="dropdown-basic">{username}</Dropdown.Toggle>

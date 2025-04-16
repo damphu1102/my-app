@@ -15,11 +15,17 @@ import { Seat } from "./components/UserPage/SeatPage/Seat";
 import { Service } from "./components/UserPage/ServicePage/Service";
 import { Event } from "./components/UserPage/EventPage/Event";
 import { Member } from "./components/UserPage/MemberPage/Member";
+import ClearStorageOnNavigate from "./components/ClearStorageOnNavigate";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LayoutRoot />,
+    element: (
+      <>
+        <ClearStorageOnNavigate />
+        <LayoutRoot />
+      </>
+    ),
     children: [
       {
         index: true,
@@ -54,7 +60,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <Login />,
+    element: (
+      <>
+        <ClearStorageOnNavigate />
+        <Login />
+      </>
+    ),
   },
   {
     path: "home_admin",
