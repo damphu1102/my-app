@@ -236,9 +236,6 @@ export const Seat = () => {
           <p>
             Giờ chiếu: {moment(data.activeTime, "HH:mm:ss").format("HH:mm")}
           </p>
-          <p style={{ maxHeight: "70px", overflowY: "auto", height: "70px" }}>
-            Ghế: {selectedSeats.map((seat) => seat.seatNumber).join(", ")}
-          </p>
           <p>
             Giá vé:{" "}
             {selectedSeats
@@ -248,14 +245,18 @@ export const Seat = () => {
                 currency: "VND",
               })}
           </p>
+          <p style={{ maxHeight: "70px", overflowY: "auto", height: "70px" }}>
+            Ghế: {selectedSeats.map((seat) => seat.seatNumber).join(", ")}
+          </p>
+          <Button
+            variant="success"
+            style={{ width: "50%", marginLeft: "25%", marginBottom: "10px" }}
+            onClick={handleNextButtonClick} // Thêm sự kiện onClick
+          >
+            Next
+          </Button>
         </div>
-        <Button
-          variant="success"
-          style={{ width: "50%", marginLeft: "25%", marginBottom: "10px" }}
-          onClick={handleNextButtonClick} // Thêm sự kiện onClick
-        >
-          Next
-        </Button>
+
         <ToastContainer />
         {toastMessage && <Toast message={toastMessage.message} />}
       </div>
