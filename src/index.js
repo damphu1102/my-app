@@ -16,6 +16,7 @@ import { Service } from "./components/UserPage/ServicePage/Service";
 import { Event } from "./components/UserPage/EventPage/Event";
 import { Member } from "./components/UserPage/MemberPage/Member";
 import ClearStorageOnNavigate from "./components/ClearStorageOnNavigate";
+import { ContentHome } from "./components/AdminPage/ContentPage/ContentHome";
 
 const router = createBrowserRouter([
   {
@@ -68,11 +69,15 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "home_admin",
+    path: "/home_admin",
     element: <HomeAdmin />,
     children: [
       {
         index: true,
+        path: "/home_admin",
+        element: <ContentHome />,
+      },
+      {
         path: "dashboard_manager",
         element: <DashboardManager />,
       },

@@ -4,20 +4,20 @@ import { Link } from "react-router-dom";
 export const CardDash = () => {
   return (
     <>
-      <Accordion defaultActiveKey="0">
-        <Accordion.Item eventKey="0">
+      <Accordion>
+        <Accordion.Item eventKey="1">
           <Accordion.Header>Quản lý doanh thu</Accordion.Header>
           <Accordion.Body>
             <Link to="dashboard_manager">Doanh thu</Link>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="3">
+        <Accordion.Item eventKey="2">
           <Accordion.Header>Quản lý phim</Accordion.Header>
           <Accordion.Body>
             <Link to="movie_manager">Danh sách phim</Link>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="1">
+        <Accordion.Item eventKey="3">
           <Accordion.Header>Quản lý rạp phim</Accordion.Header>
           <Accordion.Body>Nội dung 2</Accordion.Body>
         </Accordion.Item>

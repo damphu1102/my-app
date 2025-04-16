@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import "../ContentPage/admincontent.scss";
+import "../ContentPage/movieManager.scss";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
