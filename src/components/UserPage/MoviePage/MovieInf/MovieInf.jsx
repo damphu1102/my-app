@@ -51,11 +51,9 @@ export const MovieInf = () => {
           <Button
             variant="outline-primary"
             onClick={handleShow}
-            disabled={
-              statusMovie === "comingSoon" || statusMovie === "specialScreening"
-            }
+            disabled={statusMovie === "comingSoon"}
           >
-            Đặt vé
+            {statusMovie === "comingSoon" ? "Sắp chiếu" : " Đặt vé"}
           </Button>
         </div>
         <div className="card_inf">

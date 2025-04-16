@@ -26,10 +26,7 @@
       button {
         width: 80%;
         margin: 10px 0px;
-        position: relative; /* Thêm position relative để định vị thông báo */
-      }
-      button.disabled {
-        cursor: no-drop; /* Thay đổi con trỏ chuột thành no-drop khi nút bị vô hiệu hóa */
+        position: relative;
       }
     }
     .card_inf {
