@@ -84,8 +84,6 @@
     }
     .tab_movie {
       margin-right: 20px;
-      border: 1px solid rgb(196, 191, 191);
-      border-radius: 10px;
       .tab_btn {
         margin-left: 10px;
         margin-top: 10px;
@@ -114,8 +112,7 @@
       .data {
         display: grid;
         grid-template-columns: 0.5fr 1fr;
-        margin-bottom: 10px;
-        border-bottom: 1px solid rgb(229, 216, 216);
+        cursor: pointer;
       }
       img {
         height: 120px;

@@ -114,7 +114,8 @@ export const CardTabMovie = () => {
                 <img src={movie.image} alt={movie.movieName} />
                 <div className="list_data">
                   <h5>{movie.movieName}</h5>
-                  <p>{movie.genre}</p>
+                  <p>Thể loại: {movie.genre}</p>
+                  <p>Thời lượng: {movie.duration} phút</p>
                 </div>
               </div>
             </Link>

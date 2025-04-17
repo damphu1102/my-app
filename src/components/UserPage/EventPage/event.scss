@@ -1,4 +1,109 @@
 .event_container {
   margin-top: 130px;
   min-height: 100vh;
+
+  .event_content {
+    margin: 0px 200px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+
+    .card_event {
+      padding: 10px;
+      .title_event {
+        text-align: left;
+        padding: 10px;
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #194ea7;
+        border-left: 5px solid #194ea7;
+      }
+      .card_content {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        place-items: center;
+        &.detail-view {
+          display: block;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 10px;
+          h4 {
+            margin: 20px 20px 0px 20px;
+            font-weight: bold;
+          }
+          p {
+            margin-left: 20px;
+            color: rgb(102, 102, 102);
+          }
+          .card-img-top {
+            display: flex;
+            justify-content: center;
+            max-width: 600px;
+            border-radius: 10px;
+            margin: 15px auto;
+          }
+        }
+        .card {
+          .card-img-top {
+            object-fit: cover;
+            height: 360px;
+          }
+          .h5 {
+            font-size: 0.8rem;
+            font-weight: bold;
+            height: 40px;
+          }
+          margin-bottom: 20px;
+          border-radius: 10px;
+          button {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .card_movie {
+      padding: 10px;
+      .tab_btn {
+        margin-left: 10px;
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        .coming,
+        .showing {
+          background-color: #eee;
+          color: black;
+          margin: 0 10px;
+        }
+        .coming.active,
+        .showing.active,
+        .special.active {
+          background-color: #ff0000;
+          color: #fff;
+        }
+      }
+      .tab_list {
+        margin-top: 20px;
+        a {
+          text-decoration: none;
+          color: black;
+        }
+        .data {
+          display: grid;
+          grid-template-columns: 0.5fr 1fr;
+          margin-bottom: 10px;
+          cursor: pointer;
+        }
+        img {
+          height: 120px;
+          width: 100px;
+          border-radius: 10px;
+          margin-bottom: 10px;
+          margin-left: 10px;
+        }
+        .list_data {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
 }
