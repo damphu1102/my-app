@@ -93,17 +93,16 @@ export const CardTabMovie = () => {
     <>
       <div className=" tab_btn">
         <Button
-          onClick={() => handleClick("comingSoon")}
-          className={`coming ${filterStatus === "comingSoon" ? "active" : ""}`}
-        >
-          PHIM SẮP CHIẾU
-        </Button>
-
-        <Button
           onClick={() => handleClick("showingNow")}
           className={`showing ${filterStatus === "showingNow" ? "active" : ""}`}
         >
           PHIM ĐANG CHIẾU
+        </Button>
+        <Button
+          onClick={() => handleClick("comingSoon")}
+          className={`coming ${filterStatus === "comingSoon" ? "active" : ""}`}
+        >
+          PHIM SẮP CHIẾU
         </Button>
       </div>
       <div className="tab_list">

@@ -13,7 +13,7 @@ export const Payment = ({ show, onHide, data, TotalPrice }) => {
     (seatInfo) => seatInfo.seatNumber
   );
   const cinema = data.selectedCinema;
-  const room = data.room;
+  const rooms = data.selectedSeatsInfo.map(() => data.room[0]);
   const time = data.activeTime;
   const date = data.date;
 
@@ -26,19 +26,24 @@ export const Payment = ({ show, onHide, data, TotalPrice }) => {
         movieName: movieName,
         seatNumber: seatNumber,
         cinema: cinema,
-        room: room,
+        room: rooms,
         time: time,
         date: date,
       });
       const url = response.data;
       window.location.href = url.order_url;
     } catch (error) {
-      console.error("Lỗi giao dịch");
+      console.error("Lỗi thanh toán:", {
+        message: error.message,
+        response: error.response?.data,
+      });
+      alert(`Lỗi thanh toán: ${error.response?.data?.error || error.message}`);
     }
   };
 
   useEffect(() => {
     console.log(data);
+    console.log(rooms);
   }, [data]); // Log lại nếu `data` thay đổi (tùy chọn)
 
   return (

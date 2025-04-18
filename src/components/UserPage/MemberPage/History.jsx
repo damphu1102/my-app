@@ -13,6 +13,7 @@ export const History = () => {
   const [show, setShow] = useState(false);
   const [selectedAppTransId, setSelectedAppTransId] = useState(null);
   const [transactionDetails, setTransactionDetails] = useState(null);
+  console.log(transactionDetails);
 
   const handleClose = () => {
     setShow(false);
@@ -137,22 +138,44 @@ export const History = () => {
 export const DetailedInformation = ({ show, onHide, transactionDetails }) => {
   return (
     <>
-      <Modal show={show} onHide={onHide} centered>
+      <Modal show={show} onHide={onHide} centered size="lg">
         <Modal.Header closeButton>
           <Modal.Title>Chi tiết vé đã mua</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ textAlign: "center" }}>
           {transactionDetails ? (
             <>
-              <p>Tên phim: {transactionDetails.movieName}</p>
-              <p>Rạp chiếu: {transactionDetails.cinema}</p>
-              <p>Phòng chiếu: {transactionDetails.room}</p>
-              <p>Ngày chiếu: {transactionDetails.date}</p>
-              <p>
-                Giờ chiếu:{" "}
-                {moment(transactionDetails.time, "HH:mm:ss").format("HH:mm")}
-              </p>
-              <p>Ghế đã đặt: {transactionDetails.seatNumber}</p>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Tên phim</th>
+                    <th>Rạp chiếu</th>
+                    <th>Phòng chiếu</th>
+                    <th>Ngày chiếu</th>
+                    <th>Giờ chiếu</th>
+                    <th>Ghế đã đặt</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{transactionDetails.movieName}</td>
+                    <td>{transactionDetails.cinema}</td>
+                    <td>{transactionDetails.room}</td>
+                    <td>
+                      {moment(transactionDetails.date).format("DD/MM/YYYY")}
+                    </td>
+                    <td>
+                      {moment(transactionDetails.time, "HH:mm:ss").format(
+                        "HH:mm"
+                      )}
+                    </td>
+                    <td>
+                      {transactionDetails.seatNumberList &&
+                        transactionDetails.seatNumberList.join(", ")}
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
             </>
           ) : (
             <p>Đang tải thông tin chi tiết...</p>
