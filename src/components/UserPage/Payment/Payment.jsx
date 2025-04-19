@@ -43,7 +43,6 @@ export const Payment = ({ show, onHide, data, TotalPrice }) => {
 
   useEffect(() => {
     console.log(data);
-    console.log(rooms);
   }, [data]); // Log lại nếu `data` thay đổi (tùy chọn)
 
   return (

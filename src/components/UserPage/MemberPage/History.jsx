@@ -93,6 +93,7 @@ export const History = () => {
                 <td>{index + 1}</td>
                 <td>{transaction.appTransId}</td>
                 <td>{transaction.amount}</td>
+                <td>{transaction.timestamp}</td>
                 <td
                   style={{
                     color: transaction.status === 1 ? "green" : "red",
@@ -101,7 +102,6 @@ export const History = () => {
                 >
                   {transaction.status === 1 ? "Thành công" : "Thất bại"}
                 </td>
-                <td>{transaction.timestamp}</td>
                 <td
                   onClick={() => handleShow(transaction.appTransId)}
                   style={{
