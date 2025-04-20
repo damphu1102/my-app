@@ -183,6 +183,36 @@ export const Header = () => {
     navigate("/");
   };
 
+  const [email, setEmail] = useState(""); // State để lưu trữ email
+  const [emailError, setEmailError] = useState(""); // State để lưu trữ thông báo lỗi
+  const [otp, setOtp] = useState("");
+  const [otpError, setOtpError] = useState("");
+
+  const handleContinue = async () => {
+    if (!email) {
+      setEmailError("Vui lòng nhập email.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/auth/send-otp?email=${email}`
+      );
+      if (response.status === 200) {
+        handleBackModalOTP();
+      } else {
+        // Xử lý lỗi từ API
+        setEmailError(
+          `Lỗi: ${response.data || "Không thể gửi mã OTP. Vui lòng thử lại."}`
+        );
+      }
+    } catch (error) {
+      // Xử lý lỗi mạng hoặc lỗi không xác định
+      setEmailError("Không thể kết nối đến máy chủ. Vui lòng thử lại sau.");
+      console.error("Lỗi gọi API:", error); // Log lỗi để debug
+    }
+  };
+
   return (
     <div className="container_header">
       <div className="content">
@@ -254,18 +284,31 @@ export const Header = () => {
         show={showForget}
         onHide={handleCloseForget}
         onBack={handleBackLogin}
-        onContinue={handleShowModalOTP}
+        email={email}
+        setEmail={setEmail}
+        emailError={emailError}
+        setEmailError={setEmailError}
+        handleContinue={handleContinue}
       />
       <ModalOTP
         show={showModalOTP}
         onHide={handleCloseModalOTP}
         onBack={handleBackForget}
         onContinue={handleShowChangePass}
+        email={email}
+        otp={otp}
+        setOtp={setOtp}
+        setOtpError={setOtpError}
+        otpError={otpError}
       />
       <NewPass
         show={showChangePass}
         onHide={handleCloseChangePass}
         onBack={handleBackModalOTP}
+        email={email}
+        setEmail={setEmail}
+        setOtp={setOtp}
+        setToastMessage={setToastMessage}
       />
       <ToastContainer />
       {toastMessage && <Toast message={toastMessage?.message} />}
