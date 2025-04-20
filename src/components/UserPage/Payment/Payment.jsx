@@ -16,6 +16,7 @@ export const Payment = ({ show, onHide, data, TotalPrice }) => {
   const rooms = data.selectedSeatsInfo.map(() => data.room[0]);
   const time = data.activeTime;
   const date = data.date;
+  const email = userData.emailAccount;
 
   const handlePayment = async () => {
     try {
@@ -29,6 +30,7 @@ export const Payment = ({ show, onHide, data, TotalPrice }) => {
         room: rooms,
         time: time,
         date: date,
+        emailAccount: email,
       });
       const url = response.data;
       window.location.href = url.order_url;

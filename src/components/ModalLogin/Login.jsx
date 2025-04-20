@@ -13,6 +13,7 @@ export const Login = ({
   handleLogin,
   loginError,
   setLogindError,
+  onForget,
 }) => {
   // const [rememberMe, setRememberMe] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false); // State để theo dõi trạng thái hiển thị mật khẩu
@@ -111,7 +112,7 @@ export const Login = ({
             alt="Google"
           />
         </div>
-        <div className="forget_pass">
+        <div className="forget_pass" onClick={onForget}>
           <p>Quên mật khẩu?</p>
         </div>
         <div className="register">

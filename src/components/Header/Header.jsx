@@ -9,10 +9,16 @@ import { Dropdown } from "react-bootstrap";
 import { Toast } from "../UserPage/ToastPage";
 import { ToastContainer } from "react-toastify";
 import { FaUser } from "react-icons/fa";
+import { ForgetPassword } from "../ModalLogin/ForgetPassword";
+import { ModalOTP } from "../ModalLogin/ModalOTP";
+import { NewPass } from "../ModalLogin/NewPass";
 
 export const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [showForget, setShowForget] = useState(false);
+  const [showModalOTP, setShowModalOTP] = useState(false);
+  const [showChangePass, setShowChangePass] = useState(false);
   const [login, setLogin] = useState({
     userName: "",
     passWord: "",
@@ -53,7 +59,45 @@ export const Header = () => {
   const handleBackLogin = () => {
     handleCloseRegister();
     handleShowLogin();
+    handleCloseForget();
     setValidated(false);
+  };
+
+  const handleShowForget = () => {
+    handleCloseLogin();
+    setShowForget(true);
+  };
+
+  const handleCloseForget = () => {
+    setShowForget(false);
+  };
+
+  const handleShowModalOTP = () => {
+    setShowModalOTP(true);
+    handleCloseForget();
+  };
+
+  const handleCloseModalOTP = () => {
+    setShowModalOTP(false);
+  };
+
+  const handleBackForget = () => {
+    handleCloseModalOTP();
+    handleShowForget();
+  };
+
+  const handleShowChangePass = () => {
+    setShowChangePass(true);
+    handleCloseModalOTP();
+  };
+
+  const handleCloseChangePass = () => {
+    setShowChangePass(false);
+  };
+
+  const handleBackModalOTP = () => {
+    handleCloseChangePass();
+    handleShowModalOTP();
   };
 
   const handleLogin = async () => {
@@ -197,6 +241,7 @@ export const Header = () => {
         validated={validated}
         loginError={loginError}
         setLogindError={setLogindError}
+        onForget={handleShowForget}
       />
       <Register
         show={showRegister}
@@ -204,6 +249,23 @@ export const Header = () => {
         onBack={handleBackLogin}
         validated={validated}
         setValidated={setValidated}
+      />
+      <ForgetPassword
+        show={showForget}
+        onHide={handleCloseForget}
+        onBack={handleBackLogin}
+        onContinue={handleShowModalOTP}
+      />
+      <ModalOTP
+        show={showModalOTP}
+        onHide={handleCloseModalOTP}
+        onBack={handleBackForget}
+        onContinue={handleShowChangePass}
+      />
+      <NewPass
+        show={showChangePass}
+        onHide={handleCloseChangePass}
+        onBack={handleBackModalOTP}
       />
       <ToastContainer />
       {toastMessage && <Toast message={toastMessage?.message} />}
