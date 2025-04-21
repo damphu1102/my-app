@@ -22,13 +22,11 @@ export const ModalOTP = ({
       const response = await axios.post(
         `http://localhost:8080/auth/verify-otp?email=${email}&otp=${otp}`
       );
-      if (response.status === 200) {
+      if (response.data === true) {
         onContinue(); // Gọi hàm onContinue để chuyển sang bước tiếp theo
       } else {
         // Xử lý lỗi từ API (ví dụ: OTP không hợp lệ)
-        setOtpError(
-          `Lỗi: ${response.data || "Mã OTP không hợp lệ. Vui lòng thử lại."}`
-        );
+        setOtpError("Mã OTP không hợp lệ. Vui lòng thử lại.");
       }
     } catch (error) {
       // Xử lý lỗi mạng hoặc lỗi không xác định

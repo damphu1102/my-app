@@ -84,6 +84,8 @@ export const Header = () => {
   const handleBackForget = () => {
     handleCloseModalOTP();
     handleShowForget();
+    setOtp("");
+    setOtpError("");
   };
 
   const handleShowChangePass = () => {
