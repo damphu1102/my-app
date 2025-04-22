@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 export const CardMovie = ({ movie }) => {
   return (
     <>
-      <Card style={{ width: "20rem", marginBottom: "20px" }}>
+      <Card style={{ width: "24rem", marginBottom: "20px" }}>
         <Card.Img variant="top" src={movie.image} />
         <Card.Body>
           <Card.Title style={{ fontWeight: "bold", textAlign: "center" }}>

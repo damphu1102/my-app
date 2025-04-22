@@ -8,6 +8,7 @@ import { ModalMovie } from "../Modal/ModalMovie";
 import { CiSearch } from "react-icons/ci";
 import { Pagination } from "../Pagination/Pagination";
 import { LuChevronsUpDown } from "react-icons/lu";
+import moment from "moment/moment";
 
 export const MovieManager = () => {
   const [movies, setMovies] = useState([]);
@@ -153,9 +154,9 @@ export const MovieManager = () => {
                 <td>{movie.movieName}</td>
                 <td>{movie.genre}</td>
                 <td>{movie.statusMovie}</td>
-                <td>{movie.releaseDate}</td>
-                <td>{movie.createAt}</td>
-                <td>{movie.updateDate}</td>
+                <td>{moment(movie.releaseDate).format("DD/MM/YYYY")}</td>
+                <td>{moment(movie.createAt).format("DD/MM/YYYY")}</td>
+                <td>{moment(movie.updateDate).format("DD/MM/YYYY")}</td>
               </tr>
             </tbody>
           ))}

@@ -239,11 +239,14 @@ export const ModalMovie = ({
                     }}
                   >
                     <option>---</option>
-                    <option value={newMovie.language.vietnamese}>
-                      Vietnamese
+                    <option value={newMovie.language.Vietnamese}>
+                      Tiếng Việt
                     </option>
-                    <option value={newMovie.language.english}>English</option>
-                    <option value={newMovie.language.chinese}>Chinese</option>
+                    <option value={newMovie.language.English}>Tiếng Anh</option>
+                    <option value={newMovie.language.Chinese}>
+                      Tiếng Trung
+                    </option>
+                    <option value={newMovie.language.Korean}>Tiếng Hàn</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -344,13 +347,13 @@ export const ModalMovie = ({
                   >
                     <option>---</option>
                     <option value={newMovie.statusMovie.showingNow}>
-                      showingNow
+                      Đang chiếu
                     </option>
                     <option value={newMovie.statusMovie.comingSoon}>
-                      comingSoon
+                      Sắp chiếu
                     </option>
                     <option value={newMovie.statusMovie.specialScreening}>
-                      specialScreening
+                      Suất chiếu đặc biệt
                     </option>
                   </Form.Select>
                 </Form.Group>
