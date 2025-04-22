@@ -2,4 +2,35 @@
   margin-top: 90px;
   height: 80vh;
   margin-left: 220px;
+
+  .content_home {
+    padding: 10px 30px;
+    .general_inf {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px 20px;
+      text-align: center;
+      margin-bottom: 30px;
+
+      .number_data {
+        background-color: rgb(175, 240, 239);
+        border-radius: 10px;
+        padding: 20px 0px;
+        h5 {
+          font-weight: bold;
+        }
+        p {
+          font-size: 1.5rem;
+          color: red;
+        }
+      }
+    }
+    .chart {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      h4 {
+        margin: 20px;
+      }
+    }
+  }
 }

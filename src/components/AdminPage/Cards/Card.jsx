@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import { Link } from "react-router-dom";
 
@@ -54,6 +56,81 @@ export const CardDash = () => {
           <Accordion.Body>Nội dung 2</Accordion.Body>
         </Accordion.Item>
       </Accordion>
+    </>
+  );
+};
+
+export const CardGeneralInf = ({ token, transtion }) => {
+  const [numberCinema, setNumberCinema] = useState([]);
+  const [numberAccount, setNumberAccount] = useState([]);
+  useEffect(() => {
+    const fetchNumberCinema = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/cinema", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Gửi token trong header
+          },
+        });
+        setNumberCinema(response.data);
+      } catch (error) {
+        console.error("Lỗi tải cinema", error);
+      }
+    };
+    const fetNumberAccount = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/account", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Gửi token trong header
+          },
+        });
+        const nonAdminAccounts = response.data.filter(
+          (account) =>
+            account.roleAccount !== "Admin" && account.roleAccount !== "Manager"
+        );
+        setNumberAccount(nonAdminAccounts);
+      } catch (error) {
+        console.error("Lỗi tải account", error);
+      }
+    };
+
+    fetchNumberCinema();
+    fetNumberAccount();
+  }, [token]);
+
+  const totalAmount = transtion.reduce(
+    (sum, transaction) => sum + transaction.amount,
+    0
+  );
+
+  // Tính tổng số lượng ghế
+  const totalSeats = transtion.reduce(
+    (count, transaction) => count + transaction.seatNumberList.length,
+    0
+  );
+
+  return (
+    <>
+      <div className="number_data">
+        <h5>Tổng số lượng rạp</h5>
+        <p>{numberCinema.length}</p>
+      </div>
+      <div className="number_data">
+        <h5>Tổng số tài khoản đã đăng ký</h5>
+        <p>{numberAccount.length}</p>
+      </div>
+      <div className="number_data">
+        <h5>Tổng số vé đã bán</h5>
+        <p>{totalSeats}</p>
+      </div>
+      <div className="number_data">
+        <h5>Tổng doanh thu</h5>
+        <p>
+          {totalAmount.toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          })}
+        </p>
+      </div>
     </>
   );
 };
