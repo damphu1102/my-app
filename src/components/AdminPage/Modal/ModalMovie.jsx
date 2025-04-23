@@ -3,6 +3,21 @@ import "../Modal/modal.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const initialMovieState = {
+  movieName: "",
+  actor: "",
+  description: "",
+  director: "",
+  duration: "",
+  genre: "",
+  image: "",
+  language: "",
+  releaseDate: "",
+  statusMovie: "",
+  trailer: "",
+  viewingAge: "",
+};
+
 export const ModalMovie = ({
   show,
   onHide,
@@ -10,21 +25,6 @@ export const ModalMovie = ({
   isEditMode,
   onSubmitSuccess,
 }) => {
-  const initialMovieState = {
-    movieName: "",
-    actor: "",
-    description: "",
-    director: "",
-    duration: "",
-    genre: "",
-    image: "",
-    language: "",
-    releaseDate: "",
-    statusMovie: "",
-    trailer: "",
-    viewingAge: "",
-  };
-
   const [newMovie, setNewMovie] = useState(initialMovieState);
   const [createAt, setCreateAt] = useState(
     new Date().toISOString().slice(0, 10)
@@ -132,6 +132,30 @@ export const ModalMovie = ({
       alert(isEditMode ? "Cập nhật thất bại!" : "Thêm mới thất bại!");
     }
   };
+
+  const uploadImageToServer = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/images/upload",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      return response.data; // giả sử backend trả về link ảnh
+    } catch (error) {
+      console.error("Upload ảnh thất bại:", error);
+      throw error;
+    }
+  };
+
   return (
     <div>
       <Modal show={show} size="lg">
@@ -255,21 +279,24 @@ export const ModalMovie = ({
             <Row className="g-2">
               <Col md>
                 <Form.Group className="mb-3" controlId="formBasicImage">
-                  <Form.Label>
-                    Link hình ảnh{" "}
-                    <span style={{ fontStyle: "italic" }}>
-                      (Lấy link từ Cloudinary)
-                    </span>
-                  </Form.Label>
+                  <Form.Label>Link hình ảnh</Form.Label>
                   <Form.Control
-                    type="url"
-                    placeholder="Vui lòng điền link vào đây"
-                    value={newMovie.image}
-                    onChange={(e) => {
-                      setNewMovie({
-                        ...newMovie,
-                        image: e.target.value,
-                      });
+                    type="file"
+                    onChange={async (e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        try {
+                          const uploadedImageUrl = await uploadImageToServer(
+                            file
+                          );
+                          setNewMovie({
+                            ...newMovie,
+                            image: uploadedImageUrl, // gán link ảnh trả về từ API
+                          });
+                        } catch (error) {
+                          alert("Upload ảnh thất bại!");
+                        }
+                      }
                     }}
                   />
                 </Form.Group>
