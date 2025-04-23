@@ -17,6 +17,7 @@ import { Event } from "./components/UserPage/EventPage/Event";
 import { Member } from "./components/UserPage/MemberPage/Member";
 import ClearStorageOnNavigate from "./components/ClearStorageOnNavigate";
 import { ContentHome } from "./components/AdminPage/ContentPage/ContentHome";
+import { CinemaManager } from "./components/AdminPage/ContentPage/CinemaManager";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
       {
         path: "movie_manager",
         element: <MovieManager />,
+      },
+      {
+        path: "cinema_manager",
+        element: <CinemaManager />,
       },
     ],
   },

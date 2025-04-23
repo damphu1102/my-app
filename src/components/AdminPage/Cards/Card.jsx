@@ -21,7 +21,9 @@ export const CardDash = () => {
         </Accordion.Item>
         <Accordion.Item eventKey="3">
           <Accordion.Header>Quản lý rạp phim</Accordion.Header>
-          <Accordion.Body>Nội dung 2</Accordion.Body>
+          <Accordion.Body>
+            <Link to="cinema_manager"> Danh sách phim</Link>
+          </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="4">
           <Accordion.Header>Quản lý lịch chiếu</Accordion.Header>
