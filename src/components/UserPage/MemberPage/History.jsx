@@ -82,8 +82,8 @@ export const History = () => {
               <th>STT</th>
               <th>Mã giao dịch</th>
               <th>Số tiền</th>
-              <th>Trạng thái</th>
               <th>Thời gian</th>
+              <th>Trạng thái</th>
               <th>Xem thêm</th>
             </tr>
           </thead>
