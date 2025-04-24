@@ -76,7 +76,7 @@ export const Chart = ({ transtion }) => {
       <YAxis tickFormatter={formatVND} />
       <Tooltip formatter={(value) => formatVND(value)} />
       <Legend />
-      <Bar dataKey="revenue" fill="#8884d8" name="Doanh thu" />
+      <Bar dataKey="revenue" fill="#8884d8" name="Thu nhập" />
     </BarChart>
   );
 };

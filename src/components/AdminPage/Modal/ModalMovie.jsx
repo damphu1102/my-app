@@ -1,4 +1,4 @@
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import "../Modal/modal.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -158,8 +158,8 @@ export const ModalMovie = ({
 
   return (
     <div>
-      <Modal show={show} size="lg">
-        <Modal.Header>
+      <Modal show={show} size="lg" onHide={onHide}>
+        <Modal.Header closeButton>
           <Modal.Title>{isEditMode ? "Sửa phim" : "Thêm mới"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -279,7 +279,7 @@ export const ModalMovie = ({
             <Row className="g-2">
               <Col md>
                 <Form.Group className="mb-3" controlId="formBasicImage">
-                  <Form.Label>Link hình ảnh</Form.Label>
+                  <Form.Label>Hình ảnh</Form.Label>
                   <Form.Control
                     type="file"
                     onChange={async (e) => {
@@ -304,7 +304,7 @@ export const ModalMovie = ({
               <Col md>
                 <Form.Group className="mb-3" controlId="formBasicTrailer">
                   <Form.Label>
-                    Link trailer{" "}
+                    Trailer{" "}
                     <span style={{ fontStyle: "italic" }}>
                       (Lấy link nhúng của Youtube)
                     </span>
@@ -323,6 +323,31 @@ export const ModalMovie = ({
                 </Form.Group>
               </Col>
             </Row>
+            {isEditMode && (
+              <Row className="g-2">
+                <Col md>
+                  <Image
+                    src={newMovie.image}
+                    rounded
+                    width={380}
+                    height={300}
+                    style={{ marginBottom: "20px" }}
+                  />
+                </Col>
+                <Col md>
+                  <iframe
+                    src={newMovie.trailer}
+                    frameborder="0"
+                    title={newMovie.movieName}
+                    width={370}
+                    height={300}
+                    style={{ borderRadius: "10px" }}
+                    allowFullScreen
+                  ></iframe>
+                </Col>
+              </Row>
+            )}
+
             {/* Thời lượng, độ tuổi, đánh giá, ngày công chiếu, trạng thái */}
             <Row className="g-2">
               <Col md>

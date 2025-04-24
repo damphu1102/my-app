@@ -8,7 +8,6 @@ import { Login } from "./components/AdminPage/Login/Login";
 import { HomeAdmin } from "./components/AdminPage/HomeAdmin";
 import { Home } from "./components/Home/Home";
 import { MovieManager } from "./components/AdminPage/ContentPage/MovieManager";
-import { DashboardManager } from "./components/AdminPage/ContentPage/DashboardManager";
 import { MovieInf } from "./components/UserPage/MoviePage/MovieInf/MovieInf";
 import { Movie } from "./components/UserPage/MoviePage/Movie";
 import { Seat } from "./components/UserPage/SeatPage/Seat";
@@ -18,6 +17,9 @@ import { Member } from "./components/UserPage/MemberPage/Member";
 import ClearStorageOnNavigate from "./components/ClearStorageOnNavigate";
 import { ContentHome } from "./components/AdminPage/ContentPage/ContentHome";
 import { CinemaManager } from "./components/AdminPage/ContentPage/CinemaManager";
+import { UserPage } from "./components/AdminPage/ContentPage/UserPageManager";
+import { ManagerPage } from "./components/AdminPage/ContentPage/ManagerPage";
+import { TranstionManager } from "./components/AdminPage/ContentPage/TranstionManager";
 
 const router = createBrowserRouter([
   {
@@ -79,16 +81,24 @@ const router = createBrowserRouter([
         element: <ContentHome />,
       },
       {
-        path: "dashboard_manager",
-        element: <DashboardManager />,
-      },
-      {
         path: "movie_manager",
         element: <MovieManager />,
       },
       {
         path: "cinema_manager",
         element: <CinemaManager />,
+      },
+      {
+        path: "list_user",
+        element: <UserPage />,
+      },
+      {
+        path: "list_manager",
+        element: <ManagerPage />,
+      },
+      {
+        path: "list_transtion",
+        element: <TranstionManager />,
       },
     ],
   },

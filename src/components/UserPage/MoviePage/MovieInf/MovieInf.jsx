@@ -74,7 +74,11 @@ export const MovieInf = () => {
 
       <div className="content_card1">
         <div className="content_trailer">
-          <iframe src={movie.trailer} title={movie.movieName}></iframe>
+          <iframe
+            src={movie.trailer}
+            title={movie.movieName}
+            allowFullScreen
+          ></iframe>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
             <Form.Label>Gửi bình luận ở đây</Form.Label>
             <div className="input_control">
