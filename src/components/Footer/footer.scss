@@ -8,6 +8,7 @@
     text-align: left;
     padding: 5px 0;
     color: #0f1b4c;
+    cursor: pointer;
     ul {
       list-style: none;
     }
@@ -45,6 +46,13 @@
     .center_social {
       flex: 1.2;
       border-right: 1px solid rgb(228, 225, 225);
+      .img {
+        display: flex;
+        justify-content: center;
+        img {
+          margin: 0 10px;
+        }
+      }
     }
     .right_contact {
       flex: 1.2;
