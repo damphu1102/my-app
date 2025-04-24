@@ -7,10 +7,28 @@ export const CardDash = () => {
   const adminDataString = localStorage.getItem("adminData"); // Lấy chuỗi JSON userData từ localStorage
   const adminData = JSON.parse(adminDataString);
   const role = adminData.role;
+  const [activeAccordionKey, setActiveAccordionKey] = useState(null);
+  const [bodyClicked, setBodyClicked] = useState({});
+
+  const handleAccordionToggle = (eventKey) => {
+    setActiveAccordionKey(eventKey === activeAccordionKey ? null : eventKey);
+    setBodyClicked({});
+  };
+
+  const handleBodyClick = (eventKey) => {
+    // Nếu body này chưa được click (hoặc không có body nào đang được click), thì set trạng thái click của nó là true
+    if (!bodyClicked[eventKey]) {
+      setBodyClicked({ [eventKey]: true });
+    }
+    // Nếu body này đã được click, thì không làm gì cả (màu nền giữ nguyên)
+  };
 
   return (
     <>
-      <Accordion>
+      <Accordion
+        activeKey={activeAccordionKey}
+        onSelect={handleAccordionToggle}
+      >
         {/* <Accordion.Item eventKey="1">
           <Accordion.Header>Quản lý doanh thu</Accordion.Header>
           <Accordion.Body>
@@ -19,15 +37,31 @@ export const CardDash = () => {
         </Accordion.Item> */}
         <Accordion.Item eventKey="2">
           <Accordion.Header>Quản lý phim</Accordion.Header>
-          <Accordion.Body>
-            <Link to="movie_manager">Danh sách phim</Link>
-          </Accordion.Body>
+          <Link
+            to="movie_manager"
+            style={{ color: "black", textDecoration: "none" }}
+          >
+            <Accordion.Body
+              onClick={() => handleBodyClick("2")}
+              style={bodyClicked["2"] ? { backgroundColor: "#f5f5dc" } : {}}
+            >
+              Danh sách phim
+            </Accordion.Body>
+          </Link>
         </Accordion.Item>
         <Accordion.Item eventKey="3">
           <Accordion.Header>Quản lý rạp phim</Accordion.Header>
-          <Accordion.Body>
-            <Link to="cinema_manager"> Danh sách phim</Link>
-          </Accordion.Body>
+          <Link
+            to="cinema_manager"
+            style={{ color: "black", textDecoration: "none" }}
+          >
+            <Accordion.Body
+              onClick={() => handleBodyClick("3")}
+              style={bodyClicked["3"] ? { backgroundColor: "#f5f5dc" } : {}}
+            >
+              Danh sách phim
+            </Accordion.Body>
+          </Link>
         </Accordion.Item>
         {/* <Accordion.Item eventKey="4">
           <Accordion.Header>Quản lý lịch chiếu</Accordion.Header>
@@ -54,18 +88,47 @@ export const CardDash = () => {
           <>
             <Accordion.Item eventKey="6">
               <Accordion.Header>Quản lý đơn hàng</Accordion.Header>
-              <Accordion.Body>
-                <Link to="list_transtion"> Danh sách đơn hàng</Link>
-              </Accordion.Body>
+              <Link
+                to="list_transtion"
+                style={{ color: "black", textDecoration: "none" }}
+              >
+                <Accordion.Body
+                  onClick={() => handleBodyClick("6")}
+                  style={bodyClicked["6"] ? { backgroundColor: "#f5f5dc" } : {}}
+                >
+                  Danh sách đơn hàng
+                </Accordion.Body>
+              </Link>
             </Accordion.Item>
             <Accordion.Item eventKey="10">
               <Accordion.Header>Quản lý tài khoản</Accordion.Header>
-              <Accordion.Body>
-                <Link to="list_user"> Danh sách user</Link>
-              </Accordion.Body>
-              <Accordion.Body>
-                <Link to="list_manager"> Danh sách manager</Link>
-              </Accordion.Body>
+              <Link
+                to="list_user"
+                style={{ color: "black", textDecoration: "none" }}
+              >
+                <Accordion.Body
+                  onClick={() => handleBodyClick("10-1")}
+                  style={
+                    bodyClicked["10-1"] ? { backgroundColor: "#f5f5dc" } : {}
+                  }
+                >
+                  Danh sách user
+                </Accordion.Body>
+              </Link>
+
+              <Link
+                to="list_manager"
+                style={{ color: "black", textDecoration: "none" }}
+              >
+                <Accordion.Body
+                  onClick={() => handleBodyClick("10-2")}
+                  style={
+                    bodyClicked["10-2"] ? { backgroundColor: "#f5f5dc" } : {}
+                  }
+                >
+                  Danh sách manager
+                </Accordion.Body>
+              </Link>
             </Accordion.Item>
           </>
         )}
