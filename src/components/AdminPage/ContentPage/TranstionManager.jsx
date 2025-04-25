@@ -1,4 +1,4 @@
-import { Button, Form, Table } from "react-bootstrap";
+import { Form, Table } from "react-bootstrap";
 import "../ContentPage/transtion.scss";
 import { CiSearch } from "react-icons/ci";
 import { useEffect, useState } from "react";
@@ -10,6 +10,8 @@ export const TranstionManager = () => {
   const adminDataString = localStorage.getItem("adminData"); // Lấy chuỗi JSON userData từ localStorage
   const adminData = JSON.parse(adminDataString);
   const token = adminData.token;
+  const [searchTerm, setSearchTerm] = useState(""); // State cho giá trị tìm kiếm
+
   useEffect(() => {
     const fetchTrastion = async () => {
       try {
@@ -61,20 +63,27 @@ export const TranstionManager = () => {
     fetchTrastion();
   }, [token]);
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredTranstion = transtion.filter((trans) =>
+    trans.appTransId.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="page_trans">
       <div className="control_trans">
-        <Button variant="primary" style={{ width: "50%" }}>
-          Tạo mới
-        </Button>
         <Form className="d-flex_admin">
           <CiSearch className="search-icon" />
           <Form.Control
             type="search"
-            placeholder="Tìm theo tên phim"
+            placeholder="Tìm theo mã giao dịch"
             className="me-2"
             aria-label="Search"
             style={{ width: "50%" }}
+            value={searchTerm}
+            onChange={handleSearch}
           />
         </Form>
       </div>
@@ -90,7 +99,7 @@ export const TranstionManager = () => {
               <th>Trạng thái</th>
             </tr>
           </thead>
-          {transtion.map((transtion, index) => (
+          {filteredTranstion.map((transtion, index) => (
             <tbody key={index} style={{ cursor: "pointer" }}>
               <tr>
                 <td>{index + 1}</td>
