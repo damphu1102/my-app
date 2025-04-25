@@ -10,6 +10,8 @@ export const UserPage = () => {
   const adminData = JSON.parse(adminDataString);
   const token = adminData.token;
   const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // State cho giá trị tìm kiếm
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -30,6 +32,14 @@ export const UserPage = () => {
     fetchUsers();
   }, [token]);
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredUsers = users.filter((user) =>
+    user.userName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="page_manager">
       <div className="control_manager">
@@ -40,10 +50,12 @@ export const UserPage = () => {
           <CiSearch className="search-icon" />
           <Form.Control
             type="search"
-            placeholder="Tìm theo tên phim"
+            placeholder="Tìm theo username"
             className="me-2"
             aria-label="Search"
             style={{ width: "50%" }}
+            value={searchTerm}
+            onChange={handleSearch}
           />
         </Form>
       </div>
@@ -64,7 +76,7 @@ export const UserPage = () => {
               <th>Vai trò</th>
             </tr>
           </thead>
-          {users.map((user, index) => (
+          {filteredUsers.map((user, index) => (
             <tbody key={index && user.accountId} style={{ cursor: "pointer" }}>
               <tr>
                 <td>{index + 1}</td>

@@ -20,6 +20,8 @@ import { CinemaManager } from "./components/AdminPage/ContentPage/CinemaManager"
 import { UserPage } from "./components/AdminPage/ContentPage/UserPageManager";
 import { ManagerPage } from "./components/AdminPage/ContentPage/ManagerPage";
 import { TranstionManager } from "./components/AdminPage/ContentPage/TranstionManager";
+import { ShowTimeManager } from "./components/AdminPage/ContentPage/ShowtimeManager";
+import { ServiceManager } from "./components/AdminPage/ContentPage/ServiceManager";
 
 const router = createBrowserRouter([
   {
@@ -99,6 +101,14 @@ const router = createBrowserRouter([
       {
         path: "list_transtion",
         element: <TranstionManager />,
+      },
+      {
+        path: "list_showtime",
+        element: <ShowTimeManager />,
+      },
+      {
+        path: "list_service",
+        element: <ServiceManager />,
       },
     ],
   },
