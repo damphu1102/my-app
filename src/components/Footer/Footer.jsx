@@ -28,6 +28,13 @@ export const Footer = () => {
               <p>Miền Nam</p>
             </ul>
           </div>
+          <div style={{ padding: "0 100px" }}>
+            <img
+              src="https://res.cloudinary.com/dcoviwlpx/image/upload/v1745556823/images_eph0cb.jpg"
+              alt="ảnh"
+              style={{ width: "100%", height: "180px", borderRadius: "10px" }}
+            />
+          </div>
         </div>
         <div className="center_social">
           <h4>Kết nối</h4>

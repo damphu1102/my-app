@@ -37,7 +37,11 @@ export const Cinema = ({ show, handleClose, movie }) => {
               },
             }
           );
-          setCinemas(response.data);
+          // Lọc dữ liệu trước khi cập nhật state
+          const activeCinemas = response.data.filter(
+            (cinema) => cinema.statusActivate !== "Không hoạt động"
+          );
+          setCinemas(activeCinemas);
         } catch (error) {
           console.error("Error fetching movies:", error);
         }
