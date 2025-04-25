@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Form, FormText, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 const initialServicestate = {
   nameService: "",
   priceService: "",
